@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["jdk17", "maven"]
+
+[phases.build]
+cmds = ["cd smart-parking-backend && mvn clean package -DskipTests"]
+
+[start]
+cmd = "java -jar smart-parking-backend/target/smart-parking-backend-1.0.0.jar"
