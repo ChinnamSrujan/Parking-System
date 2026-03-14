@@ -6,7 +6,7 @@ function ParkingCard({ lot, onViewSlots }) {
       <div className="space-y-2 mb-4">
         <p><strong>Total Slots:</strong> {lot.totalSlots}</p>
         <p><strong>Available:</strong> <span className="text-green-600">{lot.availableSlots}</span></p>
-        <p><strong>Price:</strong> ${lot.pricePerHour}/hour</p>
+        <p><strong>Price:</strong> ₹{lot.pricePerHour}/hour</p>
       </div>
       <button
         onClick={() => onViewSlots(lot)}

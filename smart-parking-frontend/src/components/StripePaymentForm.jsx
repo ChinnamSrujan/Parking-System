@@ -47,7 +47,7 @@ function StripePaymentForm({ bookingData, onSuccess, onCancel }) {
 
       if (paymentIntent.status === 'succeeded') {
         // Process payment in backend
-        await paymentAPI.processPayment({
+        const paymentResponse = await paymentAPI.processPayment({
           bookingId: bookingData.bookingId,
           userId: bookingData.userId,
           amount: bookingData.amount,
@@ -55,7 +55,7 @@ function StripePaymentForm({ bookingData, onSuccess, onCancel }) {
           transactionId: paymentIntent.id
         });
 
-        onSuccess();
+        onSuccess(paymentIntent.id);
       }
     } catch (err) {
       setError(err.response?.data?.error || err.message || 'Payment failed');
@@ -83,7 +83,7 @@ function StripePaymentForm({ bookingData, onSuccess, onCancel }) {
       <div className="bg-gray-50 rounded-lg p-4 mb-4">
         <h3 className="font-bold text-lg mb-2">Payment Details</h3>
         <p className="text-2xl font-bold text-blue-600">
-          ${bookingData.amount.toFixed(2)}
+          ₹{bookingData.amount.toFixed(2)}
         </p>
       </div>
 
@@ -119,7 +119,7 @@ function StripePaymentForm({ bookingData, onSuccess, onCancel }) {
               Processing...
             </span>
           ) : (
-            `Pay $${bookingData.amount.toFixed(2)}`
+            `Pay ₹${bookingData.amount.toFixed(2)}`
           )}
         </button>
         <button

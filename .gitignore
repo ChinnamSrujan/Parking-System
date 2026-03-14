@@ -29,6 +29,9 @@ yarn-error.log*
 .env.local
 .env.production
 
+# Backend secrets (keep local overrides out of git)
+smart-parking-backend/src/main/resources/application-local.properties
+
 # Build files
 *.class
 *.jar
