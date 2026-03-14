@@ -19,7 +19,7 @@ public class StripeService {
     
     @PostConstruct
     public void init() {
-        Stripe.apiKey = stripeApiKey;
+        Stripe.apiKey = stripeApiKey.trim();
     }
     
     public Map<String, String> createPaymentIntent(Double amount, String currency, String description) throws StripeException {
