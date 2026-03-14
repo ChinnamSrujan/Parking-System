@@ -28,18 +28,22 @@ public class DataSeeder implements CommandLineRunner {
     
     @Override
     public void run(String... args) throws Exception {
-        // Seed users if not exists
-        if (userRepository.count() == 0) {
-            seedUsers();
-        }
-        
-        // Seed parking lots if not exists
-        if (parkingLotRepository.count() == 0) {
-            seedParkingLots();
-        } else if (parkingLotRepository.count() < 7) {
-            // Re-seed if we have fewer than 7 parking lots
-            parkingLotRepository.deleteAll();
-            seedParkingLots();
+        try {
+            // Seed users if not exists
+            if (userRepository.count() == 0) {
+                seedUsers();
+            }
+
+            // Seed parking lots if not exists
+            long lotCount = parkingLotRepository.count();
+            if (lotCount == 0) {
+                seedParkingLots();
+            } else if (lotCount < 7) {
+                parkingLotRepository.deleteAll();
+                seedParkingLots();
+            }
+        } catch (Exception e) {
+            System.err.println("⚠ DataSeeder skipped due to error: " + e.getMessage());
         }
     }
     
