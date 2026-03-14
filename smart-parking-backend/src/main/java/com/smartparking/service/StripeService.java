@@ -19,7 +19,12 @@ public class StripeService {
     
     @PostConstruct
     public void init() {
-        Stripe.apiKey = stripeApiKey.trim();
+        String key = stripeApiKey.trim();
+        // Remove leading = sign if accidentally included
+        if (key.startsWith("=")) {
+            key = key.substring(1);
+        }
+        Stripe.apiKey = key;
     }
     
     public Map<String, String> createPaymentIntent(Double amount, String currency, String description) throws StripeException {
