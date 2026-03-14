@@ -4,7 +4,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import StripePaymentForm from './StripePaymentForm';
 import PaymentReceipt from './PaymentReceipt';
 
-const stripePromise = loadStripe('pk_test_51Pj0VpGc33FIU749EMLawVQkOV7spemXurv4haAxQUKgE1lQ8luRK2zWq9Q5UmC7VcPEL3viRHW1DQKWC7FxsllR00R0pn2vQQ');
+const stripePromise = loadStripe('pk_test_51Pj0VpGc33FIU749EMLawVQkOV7spemXurv4haAxQUKgE1lQ8luRK2zWq9Q5UmC7VcPEL3viRHW1DQKWC7FxsllR00R0pn2vQQ'.trim());
 
 function BookingModal({ slot, parkingLot, onClose, onConfirm }) {
   const user = JSON.parse(localStorage.getItem('user'));
