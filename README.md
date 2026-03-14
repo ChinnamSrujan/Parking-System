@@ -1,198 +1,144 @@
 # Smart Parking Management System
 
-A full-stack parking management system built with Java Spring Boot and React.js, using MongoDB Atlas as the database.
+A full-stack Smart Parking Management System built with **Spring Boot**, **React.js**, and **MongoDB Atlas**.
+
+## Tech Stack
+
+- **Backend:** Java 17, Spring Boot, Spring Security (JWT), MongoDB Atlas, Stripe
+- **Frontend:** React.js, Vite, Tailwind CSS, Chart.js, Stripe Elements
+- **Database:** MongoDB Atlas (Cloud)
 
 ## Features
 
-### User Features
-- User registration and login with JWT authentication
-- Search parking locations
-- View available parking slots in real-time
-- Reserve parking slots
-- Make payments
-- View booking history
-- QR code generation for parking entry
-- Cancel active bookings
-
-### Admin Features
-- Create and manage parking locations
-- Add parking slots
-- View all bookings
-- System analytics dashboard
-- Revenue statistics
-- Parking utilization tracking
-
-### Advanced Features
+- JWT-based authentication with role-based access (USER / ADMIN)
+- Search and book parking slots across 7 real locations
+- Stripe payment gateway integration
+- QR code generation for each booking
+- Built-in QR scanner for entry verification
+- Admin dashboard with analytics and revenue stats
 - Auto-release of unpaid bookings after 15 minutes
-- QR code generation for entry validation
-- Real-time slot availability
-- Analytics dashboard with charts
-- Role-based access control (USER/ADMIN)
-
-## Technology Stack
-
-### Backend
-- Java 17
-- Spring Boot 3.2.0
-- Spring Data MongoDB
-- Spring Security with JWT
-- MongoDB Atlas
-- Maven
-- Lombok
-- ZXing (QR Code generation)
-
-### Frontend
-- React.js 18
-- React Router
-- Axios
-- Tailwind CSS
-- Chart.js
-- Vite
-
-## Database Schema
-
-### Collections
-
-**Users**
-- _id, name, email, password, phone, role, createdAt
-
-**ParkingLots**
-- _id, locationName, address, totalSlots, availableSlots, pricePerHour, slots[]
-
-**Bookings**
-- _id, userId, parkingLotId, slotId, bookingStartTime, bookingEndTime, status, paymentId, qrCode, createdAt
-
-**Payments**
-- _id, bookingId, userId, amount, paymentMethod, paymentStatus, transactionId, paymentTime
-
-## Setup Instructions
-
-### Prerequisites
-- Java 17 or higher
-- Node.js 18 or higher
-- Maven
-- MongoDB Atlas account
-
-### Backend Setup
-
-1. Navigate to backend directory:
-```bash
-cd smart-parking-backend
-```
-
-2. Set database password as environment variable:
-```bash
-export DB_PASSWORD=your_mongodb_password
-```
-
-3. Build the project:
-```bash
-mvn clean install
-```
-
-4. Run the application:
-```bash
-mvn spring-boot:run
-```
-
-Backend will start on `http://localhost:8080`
-
-### Frontend Setup
-
-1. Navigate to frontend directory:
-```bash
-cd smart-parking-frontend
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Start development server:
-```bash
-npm run dev
-```
-
-Frontend will start on `http://localhost:3000`
-
-## API Endpoints
-
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - User login
-
-### Parking
-- `GET /api/parking-lots` - Get all parking lots
-- `GET /api/parking-lots/{id}` - Get parking lot by ID
-- `GET /api/parking-lots/{id}/slots` - Get slots for parking lot
-
-### Booking
-- `POST /api/bookings` - Create new booking
-- `GET /api/bookings/user/{userId}` - Get user bookings
-- `DELETE /api/bookings/{bookingId}` - Cancel booking
-
-### Payment
-- `POST /api/payments/process` - Process payment
-
-### Admin
-- `POST /api/admin/parking-lot` - Create parking lot
-- `POST /api/admin/add-slot` - Add slot to parking lot
-- `GET /api/admin/bookings` - Get all bookings
-- `GET /api/admin/analytics` - Get system analytics
-
-## Default Credentials
-
-Create an admin user by registering with role "ADMIN" or use the following test accounts:
-
-**Admin:**
-- Email: admin@smartparking.com
-- Password: admin123
-
-**User:**
-- Email: user@smartparking.com
-- Password: user123
-
-## MongoDB Connection
-
-Update the MongoDB connection string in `application.properties`:
-```
-mongodb+srv://chinnamsrujan123:<password>@cluster0.8o30m.mongodb.net/smartparking
-```
-
-Replace `<password>` with your actual MongoDB Atlas password.
-
-## Security
-
-- Passwords encrypted using BCrypt
-- JWT token-based authentication
-- Role-based access control (RBAC)
-- CORS configured for frontend access
 
 ## Project Structure
 
-### Backend
 ```
-src/main/java/com/smartparking/
-├── config/          # Security, JWT configuration
-├── controller/      # REST controllers
-├── dto/            # Data transfer objects
-├── exception/      # Exception handlers
-├── model/          # Entity models
-├── repository/     # MongoDB repositories
-├── scheduler/      # Scheduled tasks
-├── service/        # Business logic
-└── util/           # Utility classes
+Parking-System/
+├── smart-parking-backend/        # Spring Boot API
+│   ├── src/main/java/com/smartparking/
+│   │   ├── config/               # Security, JWT, Stripe, DataSeeder
+│   │   ├── controller/           # REST controllers
+│   │   ├── service/              # Business logic
+│   │   ├── repository/           # MongoDB repositories
+│   │   ├── model/                # Data models
+│   │   ├── dto/                  # Request/Response DTOs
+│   │   ├── scheduler/            # Auto-release scheduler
+│   │   ├── util/                 # QR code generator
+│   │   └── exception/            # Global exception handler
+│   └── src/main/resources/
+│       └── application.properties
+│
+├── smart-parking-frontend/       # React + Vite app
+│   ├── src/
+│   │   ├── components/           # Navbar, BookingModal, QRScanner, etc.
+│   │   ├── pages/                # Login, Register, Dashboard, etc.
+│   │   └── services/             # Axios API client
+│   └── .env.example
+│
+├── SETUP_INSTRUCTIONS.md
+└── README.md
 ```
 
-### Frontend
-```
-src/
-├── components/     # Reusable components
-├── pages/         # Page components
-└── services/      # API services
+## Getting Started
+
+### Prerequisites
+- Java 17+
+- Node.js 16+
+- Maven
+- MongoDB Atlas account
+- Stripe account
+
+### Backend Setup
+
+1. Configure environment variables or create `application-local.properties`:
+
+```properties
+spring.data.mongodb.uri=your_mongodb_connection_string
+stripe.api.key=your_stripe_secret_key
+stripe.publishable.key=your_stripe_publishable_key
+jwt.secret=your_jwt_secret
 ```
 
-## License
+2. Run the backend:
 
-MIT License
+```bash
+cd smart-parking-backend
+mvn spring-boot:run
+```
+
+> On Windows with Java 24, use:
+> ```bash
+> $env:MAVEN_OPTS='-Djavax.net.ssl.trustStoreType=Windows-ROOT'; mvn spring-boot:run
+> ```
+
+### Frontend Setup
+
+1. Create `.env` in `smart-parking-frontend/`:
+
+```env
+VITE_API_URL=http://localhost:8080/api
+VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+```
+
+2. Install dependencies and run:
+
+```bash
+cd smart-parking-frontend
+npm install
+npm run dev
+```
+
+### Access
+
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8080/api
+
+## Test Accounts
+
+| Role  | Email                     | Password |
+|-------|---------------------------|----------|
+| User  | user@smartparking.com     | user123  |
+| Admin | admin@smartparking.com    | admin123 |
+
+## Stripe Test Cards
+
+| Card Number          | Result              |
+|----------------------|---------------------|
+| 4242 4242 4242 4242  | Success             |
+| 4000 0000 0000 0002  | Declined            |
+| 4000 0000 0000 9995  | Insufficient Funds  |
+
+## Parking Locations (Seeded)
+
+| Location                    | Slots | Price/hr |
+|-----------------------------|-------|----------|
+| Phoenix Marketcity Mall     | 60    | $4.00    |
+| Nexus Shantiniketan Mall    | 50    | $3.50    |
+| Forum Value Mall            | 45    | $3.00    |
+| PVR Cinemas - Orion Mall    | 40    | $5.00    |
+| INOX Multiplex - Garuda Mall| 35    | $5.00    |
+| Lulu Mall Parking           | 70    | $4.50    |
+| Cinepolis - Elements Mall   | 40    | $4.00    |
+
+## API Endpoints
+
+| Method | Endpoint                        | Description           |
+|--------|---------------------------------|-----------------------|
+| POST   | /api/auth/register              | Register user         |
+| POST   | /api/auth/login                 | Login                 |
+| GET    | /api/parking-lots               | List parking lots     |
+| GET    | /api/parking-lots/{id}/slots    | Get slots             |
+| POST   | /api/bookings                   | Create booking        |
+| GET    | /api/bookings/user/{userId}     | User bookings         |
+| DELETE | /api/bookings/{bookingId}       | Cancel booking        |
+| POST   | /api/payments/create-intent     | Create payment intent |
+| POST   | /api/payments/process           | Process payment       |
+| GET    | /api/admin/analytics            | Admin analytics       |
