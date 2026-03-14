@@ -36,6 +36,10 @@ public class DataSeeder implements CommandLineRunner {
         // Seed parking lots if not exists
         if (parkingLotRepository.count() == 0) {
             seedParkingLots();
+        } else if (parkingLotRepository.count() < 7) {
+            // Re-seed if we have fewer than 7 parking lots
+            parkingLotRepository.deleteAll();
+            seedParkingLots();
         }
     }
     
@@ -64,54 +68,75 @@ public class DataSeeder implements CommandLineRunner {
     }
     
     private void seedParkingLots() {
-        // Downtown Parking
-        ParkingLot downtown = createParkingLot(
-            "Downtown Parking Plaza",
-            "123 Main Street, Downtown",
-            30,
-            5.0
-        );
-        parkingLotRepository.save(downtown);
-        
-        // Airport Parking
-        ParkingLot airport = createParkingLot(
-            "Airport Long-term Parking",
-            "Airport Road, Terminal 2",
-            50,
-            3.5
-        );
-        parkingLotRepository.save(airport);
-        
-        // Mall Parking
-        ParkingLot mall = createParkingLot(
-            "City Mall Parking",
-            "456 Shopping Boulevard",
-            40,
-            4.0
-        );
-        parkingLotRepository.save(mall);
-        
-        System.out.println("✓ Seeded parking lots");
+        // 1. Phoenix Marketcity Mall
+        parkingLotRepository.save(createParkingLot(
+            "Phoenix Marketcity Mall",
+            "Whitefield Main Road, Mahadevapura, Bengaluru - 560048",
+            60, 4.0, "B"
+        ));
+
+        // 2. Nexus Mall
+        parkingLotRepository.save(createParkingLot(
+            "Nexus Shantiniketan Mall",
+            "ITPL Main Road, Whitefield, Bengaluru - 560066",
+            50, 3.5, "C"
+        ));
+
+        // 3. Forum Mall
+        parkingLotRepository.save(createParkingLot(
+            "Forum Value Mall",
+            "Whitefield Road, Mahadevapura, Bengaluru - 560048",
+            45, 3.0, "D"
+        ));
+
+        // 4. PVR Cinemas
+        parkingLotRepository.save(createParkingLot(
+            "PVR Cinemas - Orion Mall",
+            "Dr. Rajkumar Road, Rajajinagar, Bengaluru - 560010",
+            40, 5.0, "E"
+        ));
+
+        // 5. INOX Multiplex
+        parkingLotRepository.save(createParkingLot(
+            "INOX Multiplex - Garuda Mall",
+            "Magrath Road, Ashok Nagar, Bengaluru - 560025",
+            35, 5.0, "F"
+        ));
+
+        // 6. Lulu Mall
+        parkingLotRepository.save(createParkingLot(
+            "Lulu Mall Parking",
+            "Sarjapur Main Road, Bellandur, Bengaluru - 560103",
+            70, 4.5, "G"
+        ));
+
+        // 7. Cinepolis - Elements Mall
+        parkingLotRepository.save(createParkingLot(
+            "Cinepolis - Elements Mall",
+            "Thanisandra Main Road, Nagawara, Bengaluru - 560045",
+            40, 4.0, "H"
+        ));
+
+        System.out.println("✓ Seeded 7 parking lots");
     }
-    
-    private ParkingLot createParkingLot(String name, String address, int totalSlots, double price) {
+
+    private ParkingLot createParkingLot(String name, String address, int totalSlots, double price, String prefix) {
         ParkingLot lot = new ParkingLot();
         lot.setLocationName(name);
         lot.setAddress(address);
         lot.setTotalSlots(totalSlots);
         lot.setAvailableSlots(totalSlots);
         lot.setPricePerHour(price);
-        
+
         List<Slot> slots = new ArrayList<>();
         for (int i = 1; i <= totalSlots; i++) {
             Slot slot = new Slot();
-            slot.setSlotId("slot-" + name.replaceAll(" ", "-").toLowerCase() + "-" + i);
-            slot.setSlotNumber("A" + i);
+            slot.setSlotId("slot-" + name.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase() + "-" + i);
+            slot.setSlotNumber(prefix + i);
             slot.setStatus("AVAILABLE");
             slots.add(slot);
         }
         lot.setSlots(slots);
-        
         return lot;
     }
 }
