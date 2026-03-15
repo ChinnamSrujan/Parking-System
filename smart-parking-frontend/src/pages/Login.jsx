@@ -49,6 +49,9 @@ function Login() {
         <p className="mt-4 text-center text-gray-600">
           Don't have an account? <Link to="/register" className="text-blue-600 hover:underline">Register</Link>
         </p>
+        <p className="mt-2 text-center">
+          <Link to="/admin-login" className="text-gray-400 text-sm hover:underline">Admin Login →</Link>
+        </p>
       </div>
     </div>
   );
