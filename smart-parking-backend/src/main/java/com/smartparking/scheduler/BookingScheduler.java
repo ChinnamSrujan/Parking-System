@@ -15,7 +15,7 @@ public class BookingScheduler {
     @Value("${booking.auto-release-minutes}")
     private int autoReleaseMinutes;
     
-    @Scheduled(fixedRate = 300000) // Run every 5 minutes
+    @Scheduled(fixedRate = 60000) // Run every 1 minute
     public void autoReleaseExpiredBookings() {
         bookingService.autoReleaseExpiredBookings(autoReleaseMinutes);
     }

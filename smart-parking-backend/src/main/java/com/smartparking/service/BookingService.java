@@ -70,15 +70,13 @@ public class BookingService {
     }
     
     public void autoReleaseExpiredBookings(int minutes) {
-        LocalDateTime threshold = LocalDateTime.now().minusMinutes(minutes);
-        List<Booking> expiredBookings = bookingRepository.findByStatusAndCreatedAtBefore("ACTIVE", threshold);
-        
+        // Complete bookings whose end time has passed
+        List<Booking> expiredBookings = bookingRepository.findByStatusAndBookingEndTimeBefore("ACTIVE", LocalDateTime.now());
+
         for (Booking booking : expiredBookings) {
-            if (booking.getPaymentId() == null) {
-                booking.setStatus("CANCELLED");
-                bookingRepository.save(booking);
-                parkingLotService.updateSlotStatus(booking.getParkingLotId(), booking.getSlotId(), "AVAILABLE");
-            }
+            booking.setStatus("COMPLETED");
+            bookingRepository.save(booking);
+            parkingLotService.updateSlotStatus(booking.getParkingLotId(), booking.getSlotId(), "AVAILABLE");
         }
     }
 }
