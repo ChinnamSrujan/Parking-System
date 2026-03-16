@@ -227,11 +227,14 @@ function AdminDashboard() {
                   <th className="p-3 text-left">User ID</th>
                   <th className="p-3 text-left">Slot</th>
                   <th className="p-3 text-left">Status</th>
-                  <th className="p-3 text-left">Start Time</th>
+                  <th className="p-3 text-left">Start Time (IST)</th>
+                  <th className="p-3 text-left">End Time (IST)</th>
                 </tr>
               </thead>
               <tbody>
-                {bookings.map((b) => (
+                {bookings.map((b) => {
+                  const toIST = (t) => t ? new Date(t.endsWith('Z') ? t : t + 'Z').toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : '-';
+                  return (
                   <tr key={b.id} className="border-b">
                     <td className="p-3 text-xs">{b.id}</td>
                     <td className="p-3 text-xs">{b.userId}</td>
@@ -243,9 +246,11 @@ function AdminDashboard() {
                         'bg-red-100 text-red-800'
                       }`}>{b.status}</span>
                     </td>
-                    <td className="p-3 text-sm">{new Date(b.bookingStartTime).toLocaleString()}</td>
+                    <td className="p-3 text-sm">{toIST(b.bookingStartTime)}</td>
+                    <td className="p-3 text-sm">{toIST(b.bookingEndTime)}</td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           </div>
