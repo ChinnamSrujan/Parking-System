@@ -13,12 +13,15 @@ function BookingModal({ slot, parkingLot, onClose, onConfirm }) {
   const [showReceipt, setShowReceipt] = useState(false);
   const [bookingData, setBookingData] = useState(null);
   const [receiptData, setReceiptData] = useState(null);
+  const [isCreatingBooking, setIsCreatingBooking] = useState(false);
 
   const startTime = new Date();
   const endTime = new Date(startTime.getTime() + hours * 60 * 60 * 1000);
   const totalAmount = parkingLot.pricePerHour * hours;
 
   const handleConfirm = async () => {
+    if (isCreatingBooking || bookingData) return; // prevent duplicate calls
+    setIsCreatingBooking(true);
     try {
       const data = {
         userId: user.id,
@@ -44,6 +47,8 @@ function BookingModal({ slot, parkingLot, onClose, onConfirm }) {
       setShowPayment(true);
     } catch (error) {
       alert('Failed to create booking: ' + error.message);
+    } finally {
+      setIsCreatingBooking(false);
     }
   };
 
@@ -95,8 +100,8 @@ function BookingModal({ slot, parkingLot, onClose, onConfirm }) {
                   <p className="text-xl"><strong>Total Amount:</strong> ₹{totalAmount.toFixed(2)}</p>
                 </div>
                 <div className="flex gap-4">
-                  <button onClick={handleConfirm} className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700">
-                    Proceed to Payment
+                  <button onClick={handleConfirm} disabled={isCreatingBooking} className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                    {isCreatingBooking ? 'Creating...' : 'Proceed to Payment'}
                   </button>
                   <button onClick={onClose} className="flex-1 bg-gray-400 text-white py-2 rounded hover:bg-gray-500">
                     Cancel
