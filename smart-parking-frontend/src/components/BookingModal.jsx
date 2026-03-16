@@ -23,12 +23,14 @@ function BookingModal({ slot, parkingLot, onClose, onConfirm }) {
     if (isCreatingBooking || bookingData) return; // prevent duplicate calls
     setIsCreatingBooking(true);
     try {
+      const now = new Date();
+      const end = new Date(now.getTime() + hours * 60 * 60 * 1000);
       const data = {
         userId: user.id,
         parkingLotId: parkingLot.id,
         slotId: slot.slotId,
-        bookingStartTime: startTime.toISOString(),
-        bookingEndTime: endTime.toISOString()
+        bookingStartTime: now.toISOString(),
+        bookingEndTime: end.toISOString()
       };
 
       const response = await fetch(`${import.meta.env.VITE_API_URL}/bookings`, {
