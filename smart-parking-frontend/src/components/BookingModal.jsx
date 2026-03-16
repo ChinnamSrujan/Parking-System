@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import StripePaymentForm from './StripePaymentForm';
 import PaymentReceipt from './PaymentReceipt';
 
 const stripePromise = loadStripe('pk_test_51Pj0VpGc33FIU749EMLawVQkOV7spemXurv4haAxQUKgE1lQ8luRK2zWq9Q5UmC7VcPEL3viRHW1DQKWC7FxsllR00R0pn2vQQ'.trim());
-// v2 - duplicate booking fix + IST timezone
 
 function BookingModal({ slot, parkingLot, onClose, onConfirm }) {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -15,13 +14,17 @@ function BookingModal({ slot, parkingLot, onClose, onConfirm }) {
   const [bookingData, setBookingData] = useState(null);
   const [receiptData, setReceiptData] = useState(null);
   const [isCreatingBooking, setIsCreatingBooking] = useState(false);
+  // useRef lock prevents duplicate API calls even with React StrictMode double-invoke
+  const bookingCreatedRef = useRef(false);
 
   const startTime = new Date();
   const endTime = new Date(startTime.getTime() + hours * 60 * 60 * 1000);
   const totalAmount = parkingLot.pricePerHour * hours;
 
   const handleConfirm = async () => {
-    if (isCreatingBooking || bookingData) return; // prevent duplicate calls
+    // Synchronous ref check — blocks any second call immediately
+    if (bookingCreatedRef.current || bookingData) return;
+    bookingCreatedRef.current = true;
     setIsCreatingBooking(true);
     try {
       const now = new Date();

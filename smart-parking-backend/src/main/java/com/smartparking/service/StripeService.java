@@ -33,7 +33,7 @@ public class StripeService {
         
         PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
                 .setAmount(amountInCents)
-                .setCurrency(currency)
+                .setCurrency(currency != null ? currency : "inr")
                 .setDescription(description)
                 .setAutomaticPaymentMethods(
                     PaymentIntentCreateParams.AutomaticPaymentMethods.builder()
@@ -62,7 +62,7 @@ public class StripeService {
     
     public Map<String, String> createPaymentIntentResponse(Double amount, String description) {
         try {
-            return createPaymentIntent(amount, "usd", description);
+            return createPaymentIntent(amount, "inr", description);
         } catch (StripeException e) {
             throw new RuntimeException("Failed to create payment intent: " + e.getMessage());
         }
