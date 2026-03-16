@@ -27,8 +27,8 @@ function VerificationResult({ booking, onClose }) {
                       {booking.status}
                     </span>
                   </p>
-                  <p><strong>Start Time:</strong> {new Date(booking.bookingStartTime).toLocaleString()}</p>
-                  <p><strong>End Time:</strong> {new Date(booking.bookingEndTime).toLocaleString()}</p>
+                  <p><strong>Start Time:</strong> {new Date(booking.bookingStartTime.endsWith('Z') ? booking.bookingStartTime : booking.bookingStartTime + 'Z').toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</p>
+                  <p><strong>End Time:</strong> {new Date(booking.bookingEndTime.endsWith('Z') ? booking.bookingEndTime : booking.bookingEndTime + 'Z').toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</p>
                 </div>
               </div>
 
