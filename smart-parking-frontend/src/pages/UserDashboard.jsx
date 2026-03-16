@@ -50,8 +50,8 @@ function UserDashboard() {
               <div key={booking.id} className="border p-4 rounded">
                 <p><strong>Booking ID:</strong> {booking.id}</p>
                 <p><strong>Status:</strong> <span className="text-green-600">{booking.status}</span></p>
-                <p><strong>Start:</strong> {new Date(booking.bookingStartTime).toLocaleString()}</p>
-                <p><strong>End:</strong> {new Date(booking.bookingEndTime).toLocaleString()}</p>
+                <p><strong>Start:</strong> {new Date(booking.bookingStartTime + (booking.bookingStartTime.endsWith('Z') ? '' : 'Z')).toLocaleString()}</p>
+                <p><strong>End:</strong> {new Date(booking.bookingEndTime + (booking.bookingEndTime.endsWith('Z') ? '' : 'Z')).toLocaleString()}</p>
               </div>
             ))}
           </div>

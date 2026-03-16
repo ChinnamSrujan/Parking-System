@@ -58,9 +58,9 @@ function BookingHistory() {
                   </p>
                 </div>
                 <div>
-                  <p className="mb-2"><strong>Start:</strong> {new Date(booking.bookingStartTime).toLocaleString()}</p>
-                  <p className="mb-2"><strong>End:</strong> {new Date(booking.bookingEndTime).toLocaleString()}</p>
-                  <p className="mb-2"><strong>Created:</strong> {new Date(booking.createdAt).toLocaleString()}</p>
+                  <p className="mb-2"><strong>Start:</strong> {new Date(booking.bookingStartTime + (booking.bookingStartTime.endsWith('Z') ? '' : 'Z')).toLocaleString()}</p>
+                  <p className="mb-2"><strong>End:</strong> {new Date(booking.bookingEndTime + (booking.bookingEndTime.endsWith('Z') ? '' : 'Z')).toLocaleString()}</p>
+                  <p className="mb-2"><strong>Created:</strong> {new Date(booking.createdAt + (booking.createdAt.endsWith('Z') ? '' : 'Z')).toLocaleString()}</p>
                 </div>
               </div>
               
