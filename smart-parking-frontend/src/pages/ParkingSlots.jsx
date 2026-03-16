@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { parkingAPI, bookingAPI } from '../services/api';
+import { parkingAPI } from '../services/api';
 import BookingModal from '../components/BookingModal';
 
 function ParkingSlots() {
@@ -31,15 +31,9 @@ function ParkingSlots() {
     }
   };
 
-  const handleConfirmBooking = async (bookingData) => {
-    try {
-      await bookingAPI.createBooking(bookingData);
-      alert('Booking and payment successful!');
-      setShowModal(false);
-      fetchData();
-    } catch (error) {
-      alert('Booking failed: ' + (error.response?.data?.error || error.message));
-    }
+  const handleConfirmBooking = async () => {
+    setShowModal(false);
+    fetchData();
   };
 
   const available = slots.filter(s => s.status === 'AVAILABLE').length;
