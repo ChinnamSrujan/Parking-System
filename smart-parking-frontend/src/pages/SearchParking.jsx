@@ -26,7 +26,6 @@ function SearchParking() {
             <ParkingCard lot={lot} onViewSlots={handleViewSlots} />
           </div>
         ))}
-        ))}
       </div>
     </div>
   );
