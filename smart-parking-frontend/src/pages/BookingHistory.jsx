@@ -31,17 +31,17 @@ function BookingHistory() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8">My Booking History</h1>
+    <div className="container mx-auto px-4 py-8 animate-fade-in-up">
+      <h1 className="text-4xl font-bold mb-8 animate-slide-left">My Booking History</h1>
       
       {bookings.length === 0 ? (
-        <div className="bg-white rounded-lg shadow-lg p-8 text-center">
+        <div className="bg-white rounded-lg shadow-lg p-8 text-center animate-scale-in">
           <p className="text-gray-500 text-xl">No bookings found</p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-4 stagger-children">
           {bookings.map((booking) => (
-            <div key={booking.id} className="bg-white rounded-lg shadow-lg p-6">
+            <div key={booking.id} className="bg-white rounded-lg shadow-lg p-6 animate-fade-in-up card-hover">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <p className="mb-2"><strong>Booking ID:</strong> {booking.id}</p>

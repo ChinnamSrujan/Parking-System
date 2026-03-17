@@ -23,8 +23,8 @@ function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-800 to-gray-900">
-      <div className="bg-white p-8 rounded-lg shadow-2xl w-96">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-800 to-gray-900 animate-fade-in">
+      <div className="bg-white p-8 rounded-lg shadow-2xl w-96 animate-pop-in">
         <div className="text-center mb-6">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
             <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

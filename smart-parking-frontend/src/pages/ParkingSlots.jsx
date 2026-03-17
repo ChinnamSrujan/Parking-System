@@ -48,7 +48,7 @@ function ParkingSlots() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 animate-fade-in-up">
       {/* Back button */}
       <button
         onClick={() => navigate('/search')}
@@ -62,7 +62,7 @@ function ParkingSlots() {
 
       {/* Lot Info */}
       {lot && (
-        <div className="bg-white rounded-xl shadow-md p-6 mb-8">
+        <div className="bg-white rounded-xl shadow-md p-6 mb-8 animate-scale-in">
           <h1 className="text-3xl font-bold text-gray-800 mb-1">{lot.locationName}</h1>
           <p className="text-gray-500 mb-4">{lot.address}</p>
           <div className="flex flex-wrap gap-6">

@@ -27,8 +27,8 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-500 to-blue-600">
-      <div className="bg-white p-8 rounded-lg shadow-2xl w-96">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-500 to-blue-600 animate-fade-in">
+      <div className="bg-white p-8 rounded-lg shadow-2xl w-96 animate-pop-in">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Register</h2>
         {error && <div className="bg-red-100 text-red-700 p-3 rounded mb-4">{error}</div>}
         <form onSubmit={handleSubmit}>

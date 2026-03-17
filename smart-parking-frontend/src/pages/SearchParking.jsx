@@ -18,11 +18,14 @@ function SearchParking() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8">Search Parking Locations</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="container mx-auto px-4 py-8 animate-fade-in-up">
+      <h1 className="text-4xl font-bold mb-8 animate-slide-left">Search Parking Locations</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
         {parkingLots.map((lot) => (
-          <ParkingCard key={lot.id} lot={lot} onViewSlots={handleViewSlots} />
+          <div key={lot.id} className="animate-fade-in-up card-hover">
+            <ParkingCard lot={lot} onViewSlots={handleViewSlots} />
+          </div>
+        ))}
         ))}
       </div>
     </div>

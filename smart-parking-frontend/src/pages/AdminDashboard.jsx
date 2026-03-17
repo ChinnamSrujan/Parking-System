@@ -71,8 +71,8 @@ function AdminDashboard() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-6">Admin Dashboard</h1>
+    <div className="container mx-auto px-4 py-8 animate-fade-in-up">
+      <h1 className="text-4xl font-bold mb-6 animate-slide-left">Admin Dashboard</h1>
 
       {/* Tabs */}
       <div className="flex gap-2 mb-8 border-b">
@@ -92,20 +92,20 @@ function AdminDashboard() {
       {/* Overview Tab */}
       {activeTab === 'overview' && analytics && (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-blue-500 text-white p-6 rounded-lg shadow-lg">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 stagger-children">
+            <div className="bg-blue-500 text-white p-6 rounded-lg shadow-lg animate-fade-in-up card-hover">
               <h3 className="text-xl font-semibold mb-2">Total Bookings</h3>
               <p className="text-4xl font-bold">{analytics.totalBookings}</p>
             </div>
-            <div className="bg-green-500 text-white p-6 rounded-lg shadow-lg">
+            <div className="bg-green-500 text-white p-6 rounded-lg shadow-lg animate-fade-in-up card-hover">
               <h3 className="text-xl font-semibold mb-2">Active Bookings</h3>
               <p className="text-4xl font-bold">{analytics.activeBookings}</p>
             </div>
-            <div className="bg-purple-500 text-white p-6 rounded-lg shadow-lg">
+            <div className="bg-purple-500 text-white p-6 rounded-lg shadow-lg animate-fade-in-up card-hover">
               <h3 className="text-xl font-semibold mb-2">Total Revenue</h3>
               <p className="text-4xl font-bold">₹{analytics.totalRevenue.toFixed(2)}</p>
             </div>
-            <div className="bg-orange-500 text-white p-6 rounded-lg shadow-lg">
+            <div className="bg-orange-500 text-white p-6 rounded-lg shadow-lg animate-fade-in-up card-hover">
               <h3 className="text-xl font-semibold mb-2">Utilization Rate</h3>
               <p className="text-4xl font-bold">{analytics.utilizationRate.toFixed(1)}%</p>
             </div>
@@ -191,7 +191,7 @@ function AdminDashboard() {
               const booked = lot.totalSlots - lot.availableSlots;
               const pct = lot.totalSlots > 0 ? Math.round((booked / lot.totalSlots) * 100) : 0;
               return (
-                <div key={lot.id} className="bg-white rounded-lg shadow-lg p-6">
+                <div key={lot.id} className="bg-white rounded-lg shadow-lg p-6 animate-fade-in-up card-hover">
                   <h3 className="text-lg font-bold mb-1">{lot.locationName}</h3>
                   <p className="text-gray-500 text-sm mb-4">{lot.address}</p>
                   <div className="grid grid-cols-2 gap-3 mb-4">
