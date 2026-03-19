@@ -7,12 +7,16 @@ import com.smartparking.util.QRCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
 public class BookingService {
     
+    private static final ZoneId IST = ZoneId.of("Asia/Kolkata");
+
     @Autowired
     private BookingRepository bookingRepository;
     
@@ -21,16 +25,25 @@ public class BookingService {
     
     @Autowired
     private QRCodeGenerator qrCodeGenerator;
+
+    // Parse ISO string (with or without Z) into IST LocalDateTime
+    private LocalDateTime parseToIST(String isoString) {
+        if (isoString == null) return null;
+        // Ensure it ends with Z for proper UTC parsing
+        String s = isoString.trim();
+        if (!s.endsWith("Z") && !s.contains("+")) s = s + "Z";
+        return Instant.parse(s).atZone(IST).toLocalDateTime();
+    }
     
     public Booking createBooking(BookingRequest request) {
         Booking booking = new Booking();
         booking.setUserId(request.getUserId());
         booking.setParkingLotId(request.getParkingLotId());
         booking.setSlotId(request.getSlotId());
-        booking.setBookingStartTime(request.getBookingStartTime());
-        booking.setBookingEndTime(request.getBookingEndTime());
+        booking.setBookingStartTime(parseToIST(request.getBookingStartTime()));
+        booking.setBookingEndTime(parseToIST(request.getBookingEndTime()));
         booking.setStatus("ACTIVE");
-        booking.setCreatedAt(LocalDateTime.now());
+        booking.setCreatedAt(LocalDateTime.now(IST));
         
         Booking savedBooking = bookingRepository.save(booking);
         
@@ -70,8 +83,7 @@ public class BookingService {
     }
     
     public void autoReleaseExpiredBookings(int minutes) {
-        // Complete bookings whose end time has passed
-        List<Booking> expiredBookings = bookingRepository.findByStatusAndBookingEndTimeBefore("ACTIVE", LocalDateTime.now());
+        List<Booking> expiredBookings = bookingRepository.findByStatusAndBookingEndTimeBefore("ACTIVE", LocalDateTime.now(IST));
 
         for (Booking booking : expiredBookings) {
             booking.setStatus("COMPLETED");
