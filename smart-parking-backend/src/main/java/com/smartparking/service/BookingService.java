@@ -26,13 +26,17 @@ public class BookingService {
     @Autowired
     private QRCodeGenerator qrCodeGenerator;
 
-    // Parse ISO string (with or without Z) into IST LocalDateTime
+    // Parse ISO string — if it has Z suffix, treat as UTC and convert to IST
+    // If no Z suffix, treat as already local time (IST from browser)
     private LocalDateTime parseToIST(String isoString) {
         if (isoString == null) return null;
-        // Ensure it ends with Z for proper UTC parsing
         String s = isoString.trim();
-        if (!s.endsWith("Z") && !s.contains("+")) s = s + "Z";
-        return Instant.parse(s).atZone(IST).toLocalDateTime();
+        if (s.endsWith("Z") || s.contains("+")) {
+            // Has timezone info — convert to IST
+            return Instant.parse(s.endsWith("Z") ? s : s).atZone(IST).toLocalDateTime();
+        }
+        // No timezone — already local, parse directly
+        return LocalDateTime.parse(s);
     }
     
     public Booking createBooking(BookingRequest request) {
@@ -92,15 +96,18 @@ public class BookingService {
     }
     
     public void autoReleaseExpiredBookings(int minutes) {
-        List<Booking> expiredBookings = bookingRepository.findByStatusAndBookingEndTimeBefore("ACTIVE", LocalDateTime.now(IST));
+        LocalDateTime nowIST = LocalDateTime.now(IST);
+        List<Booking> expiredBookings = bookingRepository.findByStatusAndBookingEndTimeBefore("ACTIVE", nowIST);
 
         for (Booking booking : expiredBookings) {
-            booking.setStatus("COMPLETED");
-            bookingRepository.save(booking);
-            parkingLotService.updateSlotStatus(booking.getParkingLotId(), booking.getSlotId(), "AVAILABLE");
+            // Extra safety: only complete if end time is truly in the past by at least 1 minute
+            if (booking.getBookingEndTime().isBefore(nowIST.minusMinutes(1))) {
+                booking.setStatus("COMPLETED");
+                bookingRepository.save(booking);
+                parkingLotService.updateSlotStatus(booking.getParkingLotId(), booking.getSlotId(), "AVAILABLE");
+            }
         }
 
-        // Also reconcile: free any BOOKED slot that has no ACTIVE booking
         reconcileOrphanedSlots();
     }
 
@@ -113,11 +120,20 @@ public class BookingService {
         }
 
         // For every parking lot, free any BOOKED slot not in the active set
+        // Only reconcile if the slot has been BOOKED for more than 2 minutes (avoids race conditions)
+        LocalDateTime twoMinsAgo = LocalDateTime.now(IST).minusMinutes(2);
         List<com.smartparking.model.ParkingLot> lots = parkingLotService.getAllParkingLots();
         for (com.smartparking.model.ParkingLot lot : lots) {
             for (com.smartparking.model.Slot slot : lot.getSlots()) {
                 if ("BOOKED".equals(slot.getStatus()) && !activeSlotIds.contains(slot.getSlotId())) {
-                    parkingLotService.updateSlotStatus(lot.getId(), slot.getSlotId(), "AVAILABLE");
+                    // Check if there's any recent booking for this slot (within 2 mins) — if so, skip
+                    boolean recentBookingExists = bookingRepository.findAll().stream()
+                        .anyMatch(b -> b.getSlotId().equals(slot.getSlotId())
+                            && b.getCreatedAt() != null
+                            && b.getCreatedAt().isAfter(twoMinsAgo));
+                    if (!recentBookingExists) {
+                        parkingLotService.updateSlotStatus(lot.getId(), slot.getSlotId(), "AVAILABLE");
+                    }
                 }
             }
         }
