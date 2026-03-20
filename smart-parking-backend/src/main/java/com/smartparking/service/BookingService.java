@@ -90,5 +90,27 @@ public class BookingService {
             bookingRepository.save(booking);
             parkingLotService.updateSlotStatus(booking.getParkingLotId(), booking.getSlotId(), "AVAILABLE");
         }
+
+        // Also reconcile: free any BOOKED slot that has no ACTIVE booking
+        reconcileOrphanedSlots();
+    }
+
+    private void reconcileOrphanedSlots() {
+        // Collect all slotIds that have an ACTIVE booking
+        List<Booking> activeBookings = bookingRepository.findByStatus("ACTIVE");
+        java.util.Set<String> activeSlotIds = new java.util.HashSet<>();
+        for (Booking b : activeBookings) {
+            activeSlotIds.add(b.getSlotId());
+        }
+
+        // For every parking lot, free any BOOKED slot not in the active set
+        List<com.smartparking.model.ParkingLot> lots = parkingLotService.getAllParkingLots();
+        for (com.smartparking.model.ParkingLot lot : lots) {
+            for (com.smartparking.model.Slot slot : lot.getSlots()) {
+                if ("BOOKED".equals(slot.getStatus()) && !activeSlotIds.contains(slot.getSlotId())) {
+                    parkingLotService.updateSlotStatus(lot.getId(), slot.getSlotId(), "AVAILABLE");
+                }
+            }
+        }
     }
 }
