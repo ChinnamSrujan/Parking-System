@@ -33,6 +33,7 @@ export const bookingAPI = {
   getUserBookings: (userId) => api.get(`/bookings/user/${userId}`),
   getBookingById: (bookingId) => api.get(`/bookings/${bookingId}`),
   cancelBooking: (bookingId) => api.delete(`/bookings/${bookingId}`),
+  extendBooking: (bookingId, hours) => api.put(`/bookings/${bookingId}/extend?hours=${hours}`),
 };
 
 export const paymentAPI = {
@@ -45,6 +46,8 @@ export const adminAPI = {
   addSlot: (parkingLotId, data) => api.post(`/admin/add-slot?parkingLotId=${parkingLotId}`, data),
   getAllBookings: () => api.get('/admin/bookings'),
   getAnalytics: () => api.get('/admin/analytics'),
+  blockSlot: (parkingLotId, slotId) => api.put(`/admin/slot/block?parkingLotId=${parkingLotId}&slotId=${slotId}`),
+  unblockSlot: (parkingLotId, slotId) => api.put(`/admin/slot/unblock?parkingLotId=${parkingLotId}&slotId=${slotId}`),
 };
 
 export default api;

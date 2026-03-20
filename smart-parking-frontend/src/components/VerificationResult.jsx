@@ -22,6 +22,7 @@ function VerificationResult({ booking, onClose }) {
                 <div className="space-y-2">
                   <p><strong>Booking ID:</strong> {booking.id}</p>
                   <p><strong>Slot ID:</strong> {booking.slotId}</p>
+                  {booking.vehicleNumber && <p><strong>Vehicle:</strong> <span className="font-mono bg-gray-100 px-2 py-0.5 rounded">{booking.vehicleNumber}</span></p>}
                   <p><strong>Status:</strong> 
                     <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 rounded text-sm">
                       {booking.status}

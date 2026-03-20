@@ -6,6 +6,7 @@ public class BookingRequest {
     private String slotId;
     private String bookingStartTime;
     private String bookingEndTime;
+    private String vehicleNumber;
     
     public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }
@@ -21,4 +22,7 @@ public class BookingRequest {
     
     public String getBookingEndTime() { return bookingEndTime; }
     public void setBookingEndTime(String bookingEndTime) { this.bookingEndTime = bookingEndTime; }
+
+    public String getVehicleNumber() { return vehicleNumber; }
+    public void setVehicleNumber(String vehicleNumber) { this.vehicleNumber = vehicleNumber; }
 }

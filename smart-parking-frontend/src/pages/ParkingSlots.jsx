@@ -38,6 +38,7 @@ function ParkingSlots() {
 
   const available = slots.filter(s => s.status === 'AVAILABLE').length;
   const booked = slots.filter(s => s.status !== 'AVAILABLE').length;
+  const recommendedSlot = slots.find(s => s.status === 'AVAILABLE');
 
   if (loading) {
     return (
@@ -82,14 +83,22 @@ function ParkingSlots() {
       )}
 
       {/* Legend */}
-      <div className="flex gap-6 mb-6">
+      <div className="flex gap-6 mb-6 flex-wrap">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded bg-green-500"></div>
           <span className="text-sm text-gray-600">Available</span>
         </div>
         <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded bg-yellow-400"></div>
+          <span className="text-sm text-gray-600">Recommended</span>
+        </div>
+        <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded bg-gray-300"></div>
           <span className="text-sm text-gray-600">Booked</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded bg-orange-400"></div>
+          <span className="text-sm text-gray-600">Maintenance</span>
         </div>
       </div>
 
@@ -97,25 +106,33 @@ function ParkingSlots() {
       <div className="bg-white rounded-xl shadow-md p-6">
         <h2 className="text-xl font-semibold text-gray-700 mb-6">Select a Slot</h2>
         <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3">
-          {slots.map((slot) => (
+          {slots.map((slot) => {
+            const isRecommended = recommendedSlot && slot.slotId === recommendedSlot.slotId;
+            const isMaintenance = slot.status === 'MAINTENANCE';
+            const isAvailable = slot.status === 'AVAILABLE';
+            return (
             <button
               key={slot.slotId}
               onClick={() => {
-                if (slot.status === 'AVAILABLE') {
-                  setSelectedSlot(slot);
-                  setShowModal(true);
-                }
+                if (isAvailable) { setSelectedSlot(slot); setShowModal(true); }
               }}
-              disabled={slot.status !== 'AVAILABLE'}
-              className={`p-3 rounded-lg font-semibold text-sm transition-transform ${
-                slot.status === 'AVAILABLE'
+              disabled={!isAvailable}
+              title={isRecommended ? '⭐ Recommended slot' : isMaintenance ? 'Under maintenance' : ''}
+              className={`p-3 rounded-lg font-semibold text-sm transition-transform relative ${
+                isRecommended
+                  ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-300 hover:scale-105 cursor-pointer shadow-lg ring-2 ring-yellow-600'
+                  : isAvailable
                   ? 'bg-green-500 text-white hover:bg-green-600 hover:scale-105 cursor-pointer shadow'
+                  : isMaintenance
+                  ? 'bg-orange-400 text-white cursor-not-allowed'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }`}
             >
               {slot.slotNumber}
+              {isRecommended && <span className="absolute -top-1 -right-1 text-xs">⭐</span>}
             </button>
-          ))}
+            );
+          })}
         </div>
       </div>
 

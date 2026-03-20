@@ -35,4 +35,9 @@ public class BookingController {
     public ResponseEntity<Booking> cancelBooking(@PathVariable String bookingId) {
         return ResponseEntity.ok(bookingService.cancelBooking(bookingId));
     }
+
+    @PutMapping("/{bookingId}/extend")
+    public ResponseEntity<Booking> extendBooking(@PathVariable String bookingId, @RequestParam int hours) {
+        return ResponseEntity.ok(bookingService.extendBooking(bookingId, hours));
+    }
 }

@@ -18,6 +18,7 @@ public class Booking {
     private String paymentId;
     private String qrCode;
     private LocalDateTime createdAt;
+    private String vehicleNumber;
     
     public Booking() {}
     
@@ -65,4 +66,7 @@ public class Booking {
     
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public String getVehicleNumber() { return vehicleNumber; }
+    public void setVehicleNumber(String vehicleNumber) { this.vehicleNumber = vehicleNumber; }
 }

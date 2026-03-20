@@ -45,4 +45,14 @@ public class AdminController {
     public ResponseEntity<Map<String, Object>> getAnalytics() {
         return ResponseEntity.ok(dashboardService.getAnalytics());
     }
+
+    @PutMapping("/slot/block")
+    public ResponseEntity<ParkingLot> blockSlot(@RequestParam String parkingLotId, @RequestParam String slotId) {
+        return ResponseEntity.ok(parkingLotService.blockSlot(parkingLotId, slotId));
+    }
+
+    @PutMapping("/slot/unblock")
+    public ResponseEntity<ParkingLot> unblockSlot(@RequestParam String parkingLotId, @RequestParam String slotId) {
+        return ResponseEntity.ok(parkingLotService.unblockSlot(parkingLotId, slotId));
+    }
 }

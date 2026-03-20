@@ -44,6 +44,7 @@ public class BookingService {
         booking.setBookingEndTime(parseToIST(request.getBookingEndTime()));
         booking.setStatus("ACTIVE");
         booking.setCreatedAt(LocalDateTime.now(IST));
+        booking.setVehicleNumber(request.getVehicleNumber());
         
         Booking savedBooking = bookingRepository.save(booking);
         
@@ -70,8 +71,16 @@ public class BookingService {
         return bookingRepository.findAll();
     }
     
-    public Booking cancelBooking(String bookingId) {
+    public Booking extendBooking(String bookingId, int extraHours) {
         Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+        if (!"ACTIVE".equals(booking.getStatus()))
+            throw new RuntimeException("Only active bookings can be extended");
+        booking.setBookingEndTime(booking.getBookingEndTime().plusHours(extraHours));
+        return bookingRepository.save(booking);
+    }
+
+    public Booking cancelBooking(String bookingId) {        Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
         
         booking.setStatus("CANCELLED");

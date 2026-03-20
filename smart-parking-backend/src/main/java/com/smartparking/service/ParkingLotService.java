@@ -47,6 +47,14 @@ public class ParkingLotService {
         return parkingLotRepository.save(parkingLot);
     }
     
+    public ParkingLot blockSlot(String parkingLotId, String slotId) {
+        return updateSlotStatus(parkingLotId, slotId, "MAINTENANCE");
+    }
+
+    public ParkingLot unblockSlot(String parkingLotId, String slotId) {
+        return updateSlotStatus(parkingLotId, slotId, "AVAILABLE");
+    }
+
     public ParkingLot updateSlotStatus(String parkingLotId, String slotId, String status) {
         ParkingLot parkingLot = getParkingLotById(parkingLotId);
         
@@ -59,7 +67,7 @@ public class ParkingLotService {
         slot.setStatus(status);
         
         if (oldStatus.equals("AVAILABLE") && !status.equals("AVAILABLE")) {
-            parkingLot.setAvailableSlots(parkingLot.getAvailableSlots() - 1);
+            parkingLot.setAvailableSlots(Math.max(0, parkingLot.getAvailableSlots() - 1));
         } else if (!oldStatus.equals("AVAILABLE") && status.equals("AVAILABLE")) {
             parkingLot.setAvailableSlots(parkingLot.getAvailableSlots() + 1);
         }

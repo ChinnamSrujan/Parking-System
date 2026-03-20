@@ -53,8 +53,29 @@ function AdminDashboard() {
     setShowResult(true);
   };
 
-  const handleCreateLot = async (e) => {
-    e.preventDefault();
+  const exportBookingsCSV = () => {
+    const toIST = (t) => t ? new Date(t.endsWith('Z') ? t : t + 'Z').toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : '-';
+    const headers = ['Booking ID', 'User ID', 'Slot', 'Vehicle', 'Status', 'Start Time (IST)', 'End Time (IST)'];
+    const rows = bookings.map(b => [b.id, b.userId, b.slotId, b.vehicleNumber || '', b.status, toIST(b.bookingStartTime), toIST(b.bookingEndTime)]);
+    const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'all-bookings.csv'; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleToggleSlot = async (lot, slot) => {
+    try {
+      if (slot.status === 'MAINTENANCE') {
+        await adminAPI.unblockSlot(lot.id, slot.slotId);
+      } else if (slot.status === 'AVAILABLE') {
+        await adminAPI.blockSlot(lot.id, slot.slotId);
+      }
+      fetchParkingLots();
+    } catch (e) { alert('Failed to update slot'); }
+  };
+
+  const handleCreateLot = async (e) => {    e.preventDefault();
     try {
       const slots = [];
       for (let i = 1; i <= newLot.totalSlots; i++) {
@@ -207,7 +228,26 @@ function AdminDashboard() {
                   <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
                     <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${pct}%` }}></div>
                   </div>
-                  <p className="text-xs text-gray-500 text-right">{pct}% occupied · ₹{lot.pricePerHour}/hr</p>
+                  <p className="text-xs text-gray-500 text-right mb-4">{pct}% occupied · ₹{lot.pricePerHour}/hr</p>
+                  <details className="text-sm">
+                    <summary className="cursor-pointer text-gray-500 hover:text-gray-700 font-medium">Manage Slots</summary>
+                    <div className="mt-3 grid grid-cols-5 gap-1 max-h-40 overflow-y-auto">
+                      {lot.slots && lot.slots.map(slot => (
+                        <button key={slot.slotId}
+                          onClick={() => handleToggleSlot(lot, slot)}
+                          disabled={slot.status === 'BOOKED'}
+                          title={slot.status === 'MAINTENANCE' ? 'Click to unblock' : slot.status === 'AVAILABLE' ? 'Click to block' : 'Currently booked'}
+                          className={`p-1 rounded text-xs font-medium transition ${
+                            slot.status === 'MAINTENANCE' ? 'bg-orange-400 text-white hover:bg-orange-300' :
+                            slot.status === 'AVAILABLE' ? 'bg-green-100 text-green-800 hover:bg-orange-100' :
+                            'bg-gray-200 text-gray-400 cursor-not-allowed'
+                          }`}>
+                          {slot.slotNumber}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-xs text-gray-400 mt-2">Green = available (click to block) · Orange = maintenance (click to unblock)</p>
+                  </details>
                 </div>
               );
             })}
@@ -219,6 +259,11 @@ function AdminDashboard() {
       {activeTab === 'bookings' && (
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4">All Bookings</h2>
+          <div className="flex justify-end mb-3">
+            <button onClick={exportBookingsCSV} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm font-medium">
+              ⬇ Export CSV
+            </button>
+          </div>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-100">
@@ -226,6 +271,7 @@ function AdminDashboard() {
                   <th className="p-3 text-left">Booking ID</th>
                   <th className="p-3 text-left">User ID</th>
                   <th className="p-3 text-left">Slot</th>
+                  <th className="p-3 text-left">Vehicle</th>
                   <th className="p-3 text-left">Status</th>
                   <th className="p-3 text-left">Start Time (IST)</th>
                   <th className="p-3 text-left">End Time (IST)</th>
@@ -239,6 +285,7 @@ function AdminDashboard() {
                     <td className="p-3 text-xs">{b.id}</td>
                     <td className="p-3 text-xs">{b.userId}</td>
                     <td className="p-3">{b.slotId}</td>
+                    <td className="p-3 text-sm font-mono">{b.vehicleNumber || '-'}</td>
                     <td className="p-3">
                       <span className={`px-2 py-1 rounded text-sm ${
                         b.status === 'ACTIVE' ? 'bg-green-100 text-green-800' :

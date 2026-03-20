@@ -9,6 +9,7 @@ const stripePromise = loadStripe('pk_test_51Pj0VpGc33FIU749EMLawVQkOV7spemXurv4h
 function BookingModal({ slot, parkingLot, onClose, onConfirm }) {
   const user = JSON.parse(localStorage.getItem('user'));
   const [hours, setHours] = useState(2);
+  const [vehicleNumber, setVehicleNumber] = useState('');
   const [showPayment, setShowPayment] = useState(false);
   const [showReceipt, setShowReceipt] = useState(false);
   const [bookingData, setBookingData] = useState(null);
@@ -34,7 +35,8 @@ function BookingModal({ slot, parkingLot, onClose, onConfirm }) {
         parkingLotId: parkingLot.id,
         slotId: slot.slotId,
         bookingStartTime: now.toISOString(),
-        bookingEndTime: end.toISOString()
+        bookingEndTime: end.toISOString(),
+        vehicleNumber: vehicleNumber.toUpperCase().trim()
       };
 
       const response = await fetch(`${import.meta.env.VITE_API_URL}/bookings`, {
@@ -95,6 +97,16 @@ function BookingModal({ slot, parkingLot, onClose, onConfirm }) {
                   <p><strong>Slot:</strong> {slot.slotNumber}</p>
                   <p><strong>Start Time:</strong> {startTime.toLocaleString()}</p>
                   <div>
+                    <label className="block mb-2"><strong>Vehicle Number:</strong></label>
+                    <input
+                      type="text" placeholder="e.g. KA01AB1234"
+                      value={vehicleNumber}
+                      onChange={(e) => setVehicleNumber(e.target.value)}
+                      className="w-full p-2 border rounded uppercase"
+                      required
+                    />
+                  </div>
+                  <div>
                     <label className="block mb-2"><strong>Duration (hours):</strong></label>
                     <input
                       type="number" min="1" max="24" value={hours}
@@ -106,7 +118,7 @@ function BookingModal({ slot, parkingLot, onClose, onConfirm }) {
                   <p className="text-xl"><strong>Total Amount:</strong> ₹{totalAmount.toFixed(2)}</p>
                 </div>
                 <div className="flex gap-4">
-                  <button onClick={handleConfirm} disabled={isCreatingBooking} className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                  <button onClick={handleConfirm} disabled={isCreatingBooking || !vehicleNumber.trim()} className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed">
                     {isCreatingBooking ? 'Creating...' : 'Proceed to Payment'}
                   </button>
                   <button onClick={onClose} className="flex-1 bg-gray-400 text-white py-2 rounded hover:bg-gray-500">
