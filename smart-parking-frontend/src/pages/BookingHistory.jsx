@@ -5,11 +5,12 @@ function BookingHistory() {
   const [bookings, setBookings] = useState([]);
   const [extending, setExtending] = useState(null);
   const [extendHours, setExtendHours] = useState(1);
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   useEffect(() => { fetchBookings(); }, []);
 
   const fetchBookings = async () => {
+    if (!user?.id) return;
     try {
       const response = await bookingAPI.getUserBookings(user.id);
       setBookings(response.data);

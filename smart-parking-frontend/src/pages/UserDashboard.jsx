@@ -29,11 +29,12 @@ function UserDashboard() {
   const [bookings, setBookings] = useState([]);
   const [extending, setExtending] = useState(null);
   const [extendHours, setExtendHours] = useState(1);
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   useEffect(() => { fetchBookings(); }, []);
 
   const fetchBookings = async () => {
+    if (!user?.id) return;
     try {
       const response = await bookingAPI.getUserBookings(user.id);
       setBookings(response.data.filter(b => b.status === 'ACTIVE'));
@@ -53,7 +54,7 @@ function UserDashboard() {
 
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in-up">
-      <h1 className="text-4xl font-bold mb-8 animate-slide-left">Welcome, {user.name}!</h1>
+      <h1 className="text-4xl font-bold mb-8 animate-slide-left">Welcome, {user?.name || 'User'}!</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 stagger-children">
         <Link to="/search" className="bg-blue-500 text-white p-6 rounded-lg shadow-lg hover:bg-blue-600 transition card-hover animate-fade-in-up">
