@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 
 @Service
@@ -23,19 +22,21 @@ public class BookingService {
     @Autowired
     private QRCodeGenerator qrCodeGenerator;
 
-    // Parse ISO UTC string into LocalDateTime (stored as UTC, no conversion)
-    // e.g. "2026-05-12T11:08:52.000Z" -> LocalDateTime 2026-05-12T11:08:52
+    // Parse local datetime string (no timezone) — stored as-is
+    // e.g. "2026-05-12T16:38:00" -> LocalDateTime 2026-05-12T16:38:00
     private LocalDateTime parseUTC(String isoString) {
         if (isoString == null) return null;
         String s = isoString.trim();
+        // Strip Z or timezone if present
         if (s.endsWith("Z")) s = s.substring(0, s.length() - 1);
+        if (s.contains("+")) s = s.substring(0, s.indexOf('+'));
         if (s.contains(".")) s = s.substring(0, s.indexOf('.'));
         return LocalDateTime.parse(s);
     }
 
-    // Current time in UTC for scheduler comparisons
+    // Current time as local datetime (no timezone) for scheduler
     private LocalDateTime nowUTC() {
-        return LocalDateTime.now(ZoneOffset.UTC);
+        return LocalDateTime.now();
     }
 
     public Booking createBooking(BookingRequest request) {
