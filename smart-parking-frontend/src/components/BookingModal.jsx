@@ -30,17 +30,12 @@ function BookingModal({ slot, parkingLot, onClose, onConfirm }) {
     try {
       const now = new Date();
       const end = new Date(now.getTime() + hours * 60 * 60 * 1000);
-      // Format as local datetime string (no timezone) so backend stores exactly what user sees
-      const toLocalISO = (d) => {
-        const pad = (n) => String(n).padStart(2, '0');
-        return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-      };
       const data = {
         userId: user.id,
         parkingLotId: parkingLot.id,
         slotId: slot.slotId,
-        bookingStartTime: toLocalISO(now),
-        bookingEndTime: toLocalISO(end),
+        bookingStartTime: now.toISOString(),
+        bookingEndTime: end.toISOString(),
         vehicleNumber: vehicleNumber.toUpperCase().trim()
       };
 

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Service
@@ -34,12 +35,10 @@ public class BookingService {
         return LocalDateTime.parse(s);
     }
 
-    // Current time as local datetime (no timezone) for scheduler
+    // Current time as UTC for scheduler and createdAt
     private LocalDateTime nowUTC() {
-        return LocalDateTime.now();
-    }
-
-    public Booking createBooking(BookingRequest request) {
+        return LocalDateTime.now(ZoneOffset.UTC);
+    }    public Booking createBooking(BookingRequest request) {
         Booking booking = new Booking();
         booking.setUserId(request.getUserId());
         booking.setParkingLotId(request.getParkingLotId());
