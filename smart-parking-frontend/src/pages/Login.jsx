@@ -21,8 +21,13 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 animate-fade-in">
-      <div className="bg-white p-8 rounded-lg shadow-2xl w-96 animate-pop-in">
+    <div className="relative min-h-screen flex items-center justify-center animate-fade-in"
+      style={{
+        backgroundImage: 'url(https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=1600&q=80)',
+        backgroundSize: 'cover', backgroundPosition: 'center'
+      }}>
+      <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+      <div className="bg-white p-8 rounded-lg shadow-2xl w-96 animate-pop-in relative z-10">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Login</h2>
         {error && <div className="bg-red-100 text-red-700 p-3 rounded mb-4">{error}</div>}
         <form onSubmit={handleSubmit}>

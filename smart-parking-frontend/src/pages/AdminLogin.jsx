@@ -23,8 +23,13 @@ function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-800 to-gray-900 animate-fade-in">
-      <div className="bg-white p-8 rounded-lg shadow-2xl w-96 animate-pop-in">
+    <div className="relative min-h-screen flex items-center justify-center animate-fade-in"
+      style={{
+        backgroundImage: 'url(https://images.unsplash.com/photo-1590674899484-d5640e854abe?w=1600&q=80)',
+        backgroundSize: 'cover', backgroundPosition: 'center'
+      }}>
+      <div className="absolute inset-0 bg-black bg-opacity-75"></div>
+      <div className="bg-white p-8 rounded-lg shadow-2xl w-96 animate-pop-in relative z-10">
         <div className="text-center mb-6">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
             <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -17,7 +17,7 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100">
+      <div className="min-h-screen bg-white bg-opacity-90">
         {isAuthenticated && <Navbar />}
         <Routes>
           <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to={isAdmin ? "/admin" : "/dashboard"} />} />
