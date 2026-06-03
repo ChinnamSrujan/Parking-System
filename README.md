@@ -1,144 +1,198 @@
-# Smart Parking Management System
+# 🅿️ Smart Parking System
 
-A full-stack Smart Parking Management System built with **Spring Boot**, **React.js**, and **MongoDB Atlas**.
+A full-stack smart parking management system built with **Spring Boot** (backend) and **React** (frontend), deployed on **Render** + **Vercel**.
 
-## Tech Stack
+## 🌐 Live Demo
 
-- **Backend:** Java 17, Spring Boot, Spring Security (JWT), MongoDB Atlas, Stripe
-- **Frontend:** React.js, Vite, Tailwind CSS, Chart.js, Stripe Elements
-- **Database:** MongoDB Atlas (Cloud)
+| Service | URL |
+|---------|-----|
+| Frontend | https://parking-system-o1w2.vercel.app |
+| Backend API | https://parking-system-2-rzoy.onrender.com/api |
 
-## Features
+---
 
-- JWT-based authentication with role-based access (USER / ADMIN)
-- Search and book parking slots across 7 real locations
-- Stripe payment gateway integration
-- QR code generation for each booking
-- Built-in QR scanner for entry verification
-- Admin dashboard with analytics and revenue stats
-- Auto-release of unpaid bookings after 15 minutes
+## ✨ Features
 
-## Project Structure
+### User Features
+- 🔐 Register & Login with JWT authentication
+- 🅿️ Browse 7 parking locations across Bengaluru
+- 📍 View available/booked slots in real-time
+- 🚗 Book a slot with vehicle number
+- ⭐ Recommended slot highlighted automatically
+- ⏱️ Live countdown timer on active bookings
+- ⏩ Extend booking time
+- 💳 Stripe payment integration (test mode)
+- 🧾 Payment receipt with QR code
+- 📋 Booking history with CSV export
+- ❌ Cancel active bookings
 
-```
-Parking-System/
-├── smart-parking-backend/        # Spring Boot API
-│   ├── src/main/java/com/smartparking/
-│   │   ├── config/               # Security, JWT, Stripe, DataSeeder
-│   │   ├── controller/           # REST controllers
-│   │   ├── service/              # Business logic
-│   │   ├── repository/           # MongoDB repositories
-│   │   ├── model/                # Data models
-│   │   ├── dto/                  # Request/Response DTOs
-│   │   ├── scheduler/            # Auto-release scheduler
-│   │   ├── util/                 # QR code generator
-│   │   └── exception/            # Global exception handler
-│   └── src/main/resources/
-│       └── application.properties
-│
-├── smart-parking-frontend/       # React + Vite app
-│   ├── src/
-│   │   ├── components/           # Navbar, BookingModal, QRScanner, etc.
-│   │   ├── pages/                # Login, Register, Dashboard, etc.
-│   │   └── services/             # Axios API client
-│   └── .env.example
-│
-├── SETUP_INSTRUCTIONS.md
-└── README.md
-```
+### Admin Features
+- 🔒 Separate admin login/register with secret code
+- 📊 Dashboard with analytics (total bookings, revenue, utilization)
+- 📷 QR code scanner to verify customer bookings
+- 🏢 Manage parking lots (add, view occupancy)
+- 🔧 Block/unblock individual slots (maintenance mode)
+- 📋 All bookings table with CSV export
+- 🚗 Vehicle number visible per booking
 
-## Getting Started
+### System Features
+- ⏰ Auto-complete expired bookings every 1 minute
+- 🔄 Orphaned slot reconciliation (fixes stale BOOKED slots)
+- 🌏 All times displayed in IST (Asia/Kolkata)
+- 🎨 Beautiful animations on all pages
+- 📸 Parking & location images as backgrounds
+- 📱 Responsive design (mobile-friendly)
+
+---
+
+## 🏙️ Parking Locations (Bengaluru)
+
+| # | Location | Address | Slots | Price |
+|---|----------|---------|-------|-------|
+| 1 | Phoenix Marketcity Mall | Whitefield Main Road, Mahadevapura | 60 | ₹4/hr |
+| 2 | Nexus Shantiniketan Mall | ITPL Main Road, Whitefield | 50 | ₹3.5/hr |
+| 3 | Forum Value Mall | Whitefield Road, Mahadevapura | 45 | ₹3/hr |
+| 4 | PVR Cinemas - Orion Mall | Dr. Rajkumar Road, Rajajinagar | 40 | ₹5/hr |
+| 5 | INOX Multiplex - Garuda Mall | Magrath Road, Ashok Nagar | 35 | ₹5/hr |
+| 6 | Lulu Mall Parking | Sarjapur Main Road, Bellandur | 70 | ₹4.5/hr |
+| 7 | Cinepolis - Elements Mall | Thanisandra Main Road, Nagawara | 40 | ₹4/hr |
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 18, Vite, Tailwind CSS |
+| Backend | Spring Boot 3.2, Java 21 |
+| Database | MongoDB Atlas |
+| Auth | JWT (JSON Web Tokens) |
+| Payments | Stripe (test mode) |
+| QR Code | ZXing (backend), html5-qrcode (frontend) |
+| Deployment | Render (backend), Vercel (frontend) |
+
+---
+
+## 🚀 Running Locally
 
 ### Prerequisites
-- Java 17+
-- Node.js 16+
+- Java 21+
 - Maven
-- MongoDB Atlas account
-- Stripe account
+- Node.js 18+
+- MongoDB Atlas account (or local MongoDB)
 
-### Backend Setup
+### Backend
 
-1. Configure environment variables or create `application-local.properties`:
-
-```properties
-spring.data.mongodb.uri=your_mongodb_connection_string
-stripe.api.key=your_stripe_secret_key
-stripe.publishable.key=your_stripe_publishable_key
-jwt.secret=your_jwt_secret
-```
-
-2. Run the backend:
-
-```bash
+```powershell
 cd smart-parking-backend
+$env:STRIPE_SECRET_KEY="your_stripe_secret_key"
 mvn spring-boot:run
 ```
 
-> On Windows with Java 24, use:
-> ```bash
-> $env:MAVEN_OPTS='-Djavax.net.ssl.trustStoreType=Windows-ROOT'; mvn spring-boot:run
-> ```
+Backend runs at `http://localhost:8080`
 
-### Frontend Setup
+### Frontend
 
-1. Create `.env` in `smart-parking-frontend/`:
-
-```env
-VITE_API_URL=http://localhost:8080/api
-VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
-```
-
-2. Install dependencies and run:
-
-```bash
+```powershell
 cd smart-parking-frontend
 npm install
 npm run dev
 ```
 
-### Access
+Frontend runs at `http://localhost:3000`
 
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8080/api
+### Environment Variables
 
-## Test Accounts
+**Backend** (set as env vars or in `application.properties`):
+```
+MONGODB_URI=mongodb+srv://...
+JWT_SECRET=your_jwt_secret
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_PUBLISHABLE_KEY=pk_test_...
+FRONTEND_URL=http://localhost:3000
+```
 
-| Role  | Email                     | Password |
-|-------|---------------------------|----------|
-| User  | user@smartparking.com     | user123  |
-| Admin | admin@smartparking.com    | admin123 |
+**Frontend** (`.env` file):
+```
+VITE_API_URL=http://localhost:8080/api
+```
 
-## Stripe Test Cards
+---
 
-| Card Number          | Result              |
-|----------------------|---------------------|
-| 4242 4242 4242 4242  | Success             |
-| 4000 0000 0000 0002  | Declined            |
-| 4000 0000 0000 9995  | Insufficient Funds  |
+## 📁 Project Structure
 
-## Parking Locations (Seeded)
+```
+Parking-System/
+├── smart-parking-backend/
+│   ├── src/main/java/com/smartparking/
+│   │   ├── config/          # Security, JWT, DataSeeder, Stripe
+│   │   ├── controller/      # Auth, Booking, ParkingLot, Admin, Payment
+│   │   ├── dto/             # Request DTOs
+│   │   ├── model/           # Booking, ParkingLot, Slot, User, Payment
+│   │   ├── repository/      # MongoDB repositories
+│   │   ├── scheduler/       # Auto-release expired bookings
+│   │   ├── service/         # Business logic
+│   │   └── util/            # QR code generator
+│   └── src/main/resources/
+│       └── application.properties
+├── smart-parking-frontend/
+│   └── src/
+│       ├── components/      # Navbar, BookingModal, ParkingCard, QRScanner, etc.
+│       ├── pages/           # Login, Register, Dashboard, AdminDashboard, etc.
+│       └── services/        # API calls (api.js)
+├── Dockerfile               # Docker build for Render
+└── render.yaml              # Render deployment config
+```
 
-| Location                    | Slots | Price/hr |
-|-----------------------------|-------|----------|
-| Phoenix Marketcity Mall     | 60    | $4.00    |
-| Nexus Shantiniketan Mall    | 50    | $3.50    |
-| Forum Value Mall            | 45    | $3.00    |
-| PVR Cinemas - Orion Mall    | 40    | $5.00    |
-| INOX Multiplex - Garuda Mall| 35    | $5.00    |
-| Lulu Mall Parking           | 70    | $4.50    |
-| Cinepolis - Elements Mall   | 40    | $4.00    |
+---
 
-## API Endpoints
+## 🔑 Default Credentials
 
-| Method | Endpoint                        | Description           |
-|--------|---------------------------------|-----------------------|
-| POST   | /api/auth/register              | Register user         |
-| POST   | /api/auth/login                 | Login                 |
-| GET    | /api/parking-lots               | List parking lots     |
-| GET    | /api/parking-lots/{id}/slots    | Get slots             |
-| POST   | /api/bookings                   | Create booking        |
-| GET    | /api/bookings/user/{userId}     | User bookings         |
-| DELETE | /api/bookings/{bookingId}       | Cancel booking        |
-| POST   | /api/payments/create-intent     | Create payment intent |
-| POST   | /api/payments/process           | Process payment       |
-| GET    | /api/admin/analytics            | Admin analytics       |
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@smartparking.com | admin123 |
+| User | user@smartparking.com | user123 |
+
+**Admin Registration Secret Code:** `smartparking@admin`
+
+---
+
+## 🚢 Deployment
+
+### Backend → Render
+1. Connect GitHub repo to Render
+2. Select **Docker** runtime
+3. Add environment variables
+4. Deploy — Render uses `Dockerfile` in root
+
+### Frontend → Vercel
+1. Connect GitHub repo to Vercel
+2. Set root directory to `smart-parking-frontend`
+3. Add `VITE_API_URL` environment variable pointing to Render backend
+4. Deploy
+
+---
+
+## 📱 API Endpoints
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/api/auth/register` | Register user | Public |
+| POST | `/api/auth/login` | Login | Public |
+| GET | `/api/parking-lots` | Get all lots | User |
+| GET | `/api/parking-lots/:id/slots` | Get slots | User |
+| POST | `/api/bookings` | Create booking | User |
+| GET | `/api/bookings/user/:id` | User bookings | User |
+| PUT | `/api/bookings/:id/extend` | Extend booking | User |
+| DELETE | `/api/bookings/:id` | Cancel booking | User |
+| GET | `/api/admin/bookings` | All bookings | Admin |
+| GET | `/api/admin/analytics` | Dashboard stats | Admin |
+| PUT | `/api/admin/slot/block` | Block a slot | Admin |
+| PUT | `/api/admin/slot/unblock` | Unblock a slot | Admin |
+
+---
+
+## 👨‍💻 Author
+
+**Chinnam Srujan**
+- GitHub: [@ChinnamSrujan](https://github.com/ChinnamSrujan)
