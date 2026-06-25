@@ -4,6 +4,51 @@ import DashboardChart from '../components/DashboardChart';
 import QRScanner from '../components/QRScanner';
 import VerificationResult from '../components/VerificationResult';
 
+// Mall images and styling helpers (same as ParkingCard)
+const locationImages = {
+  'phoenix':   'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Phoenix-marketcity-BLR-2.jpg/800px-Phoenix-marketcity-BLR-2.jpg',
+  'nexus':     'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Forum-Mall-Whitefield-Bangalore.jpg/800px-Forum-Mall-Whitefield-Bangalore.jpg',
+  'forum':     'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Forum-Mall-Whitefield-Bangalore.jpg/800px-Forum-Mall-Whitefield-Bangalore.jpg',
+  'pvr':       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Orion-mall-BLR-2.jpg/800px-Orion-mall-BLR-2.jpg',
+  'inox':      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Garuda_Mall_Bangalore_182322.jpg/800px-Garuda_Mall_Bangalore_182322.jpg',
+  'lulu':      'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Lulu_mall_bangalore.jpg/800px-Lulu_mall_bangalore.jpg',
+  'cinepolis': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Orion-mall-BLR-2.jpg/800px-Orion-mall-BLR-2.jpg',
+  'ub':        'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Garuda_Mall_Bangalore_182322.jpg/800px-Garuda_Mall_Bangalore_182322.jpg',
+  'royal':     'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Phoenix-marketcity-BLR-2.jpg/800px-Phoenix-marketcity-BLR-2.jpg',
+  'mantri':    'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Lulu_mall_bangalore.jpg/800px-Lulu_mall_bangalore.jpg',
+  'orion':     'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Orion-mall-BLR-2.jpg/800px-Orion-mall-BLR-2.jpg',
+  'market':    'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Forum-Mall-Whitefield-Bangalore.jpg/800px-Forum-Mall-Whitefield-Bangalore.jpg',
+  'brigade':   'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Phoenix-marketcity-BLR-2.jpg/800px-Phoenix-marketcity-BLR-2.jpg',
+  'gopalan':   'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Lulu_mall_bangalore.jpg/800px-Lulu_mall_bangalore.jpg',
+  'total':     'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Forum-Mall-Whitefield-Bangalore.jpg/800px-Forum-Mall-Whitefield-Bangalore.jpg',
+  'central':   'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Garuda_Mall_Bangalore_182322.jpg/800px-Garuda_Mall_Bangalore_182322.jpg',
+  'innovative':'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Orion-mall-BLR-2.jpg/800px-Orion-mall-BLR-2.jpg',
+};
+const locationColors = {
+  'phoenix':'from-blue-600 to-blue-800','nexus':'from-purple-600 to-purple-800',
+  'forum':'from-green-600 to-green-800','pvr':'from-red-600 to-red-800',
+  'inox':'from-orange-600 to-orange-800','lulu':'from-pink-600 to-pink-800',
+  'cinepolis':'from-indigo-600 to-indigo-800','ub':'from-yellow-600 to-yellow-800',
+  'royal':'from-rose-600 to-rose-800','mantri':'from-teal-600 to-teal-800',
+  'orion':'from-cyan-600 to-cyan-800','market':'from-lime-600 to-lime-800',
+  'brigade':'from-violet-600 to-violet-800','gopalan':'from-amber-600 to-amber-800',
+  'total':'from-emerald-600 to-emerald-800','central':'from-sky-600 to-sky-800',
+  'innovative':'from-fuchsia-600 to-fuchsia-800',
+};
+const locationIcons = {
+  'phoenix':'🏬','nexus':'🛍️','forum':'🏪','pvr':'🎬','inox':'🎭',
+  'lulu':'🏢','cinepolis':'🎥','ub':'🏙️','royal':'👑','mantri':'🏛️',
+  'orion':'🌟','market':'🏪','brigade':'🏗️','gopalan':'🎪',
+  'total':'🛒','central':'🏬','innovative':'💡',
+};
+function getLotKey(name) {
+  const lower = name.toLowerCase();
+  for (const key of Object.keys(locationImages)) {
+    if (lower.includes(key)) return key;
+  }
+  return null;
+}
+
 function AdminDashboard() {
   const [analytics, setAnalytics] = useState(null);
   const [bookings, setBookings] = useState([]);
@@ -211,43 +256,74 @@ function AdminDashboard() {
             {parkingLots.map(lot => {
               const booked = lot.totalSlots - lot.availableSlots;
               const pct = lot.totalSlots > 0 ? Math.round((booked / lot.totalSlots) * 100) : 0;
+              const key = getLotKey(lot.locationName);
+              const imgSrc = key ? locationImages[key] : null;
+              const color = key ? locationColors[key] : 'from-blue-600 to-blue-800';
+              const icon = key ? locationIcons[key] : '🅿️';
               return (
-                <div key={lot.id} className="bg-white rounded-lg shadow-lg p-6 animate-fade-in-up card-hover">
-                  <h3 className="text-lg font-bold mb-1">{lot.locationName}</h3>
-                  <p className="text-gray-500 text-sm mb-4">{lot.address}</p>
-                  <div className="grid grid-cols-2 gap-3 mb-4">
-                    <div className="bg-green-50 rounded-lg p-3 text-center">
-                      <p className="text-2xl font-bold text-green-600">{lot.availableSlots}</p>
-                      <p className="text-xs text-green-700">Available</p>
+                <div key={lot.id} className="bg-white rounded-xl shadow-lg overflow-hidden animate-fade-in-up card-hover">
+                  {/* Mall image header */}
+                  <div className="relative h-36 overflow-hidden">
+                    {imgSrc && (
+                      <img src={imgSrc} alt={lot.locationName} className="w-full h-full object-cover"
+                        onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }} />
+                    )}
+                    <div className={`w-full h-full bg-gradient-to-br ${color} flex items-center justify-center`}
+                      style={{ display: imgSrc ? 'none' : 'flex' }}>
+                      <div className="text-center">
+                        <div className="text-4xl mb-1">{icon}</div>
+                        <div className="text-white font-bold text-xs opacity-90">{lot.locationName.split(' ').slice(0,2).join(' ')}</div>
+                      </div>
                     </div>
-                    <div className="bg-red-50 rounded-lg p-3 text-center">
-                      <p className="text-2xl font-bold text-red-600">{booked}</p>
-                      <p className="text-xs text-red-700">Booked</p>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                    <div className="absolute bottom-2 left-3 text-white">
+                      <p className="font-bold text-sm drop-shadow">{lot.locationName}</p>
+                    </div>
+                    <div className={`absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-bold ${
+                      lot.availableSlots > 10 ? 'bg-green-500 text-white' :
+                      lot.availableSlots > 0 ? 'bg-yellow-400 text-gray-900' : 'bg-red-500 text-white'
+                    }`}>
+                      {lot.availableSlots > 0 ? `${lot.availableSlots} free` : 'Full'}
                     </div>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                    <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${pct}%` }}></div>
-                  </div>
-                  <p className="text-xs text-gray-500 text-right mb-4">{pct}% occupied · ₹{lot.pricePerHour}/hr</p>
-                  <details className="text-sm">
-                    <summary className="cursor-pointer text-gray-500 hover:text-gray-700 font-medium">Manage Slots</summary>
-                    <div className="mt-3 grid grid-cols-5 gap-1 max-h-40 overflow-y-auto">
-                      {lot.slots && lot.slots.map(slot => (
-                        <button key={slot.slotId}
-                          onClick={() => handleToggleSlot(lot, slot)}
-                          disabled={slot.status === 'BOOKED'}
-                          title={slot.status === 'MAINTENANCE' ? 'Click to unblock' : slot.status === 'AVAILABLE' ? 'Click to block' : 'Currently booked'}
-                          className={`p-1 rounded text-xs font-medium transition ${
-                            slot.status === 'MAINTENANCE' ? 'bg-orange-400 text-white hover:bg-orange-300' :
-                            slot.status === 'AVAILABLE' ? 'bg-green-100 text-green-800 hover:bg-orange-100' :
-                            'bg-gray-200 text-gray-400 cursor-not-allowed'
-                          }`}>
-                          {slot.slotNumber}
-                        </button>
-                      ))}
+
+                  <div className="p-4">
+                    <p className="text-gray-500 text-xs mb-3">{lot.address}</p>
+                    <div className="grid grid-cols-2 gap-3 mb-3">
+                      <div className="bg-green-50 rounded-lg p-2 text-center">
+                        <p className="text-xl font-bold text-green-600">{lot.availableSlots}</p>
+                        <p className="text-xs text-green-700">Available</p>
+                      </div>
+                      <div className="bg-red-50 rounded-lg p-2 text-center">
+                        <p className="text-xl font-bold text-red-600">{booked}</p>
+                        <p className="text-xs text-red-700">Booked</p>
+                      </div>
                     </div>
-                    <p className="text-xs text-gray-400 mt-2">Green = available (click to block) · Orange = maintenance (click to unblock)</p>
-                  </details>
+                    <div className="w-full bg-gray-200 rounded-full h-2 mb-1">
+                      <div className={`h-2 rounded-full ${pct > 80 ? 'bg-red-500' : pct > 50 ? 'bg-yellow-400' : 'bg-blue-600'}`}
+                        style={{ width: `${pct}%` }}></div>
+                    </div>
+                    <p className="text-xs text-gray-500 text-right mb-3">{pct}% occupied · ₹{lot.pricePerHour}/hr</p>
+                    <details className="text-sm">
+                      <summary className="cursor-pointer text-gray-500 hover:text-gray-700 font-medium">Manage Slots</summary>
+                      <div className="mt-3 grid grid-cols-5 gap-1 max-h-40 overflow-y-auto">
+                        {lot.slots && lot.slots.map(slot => (
+                          <button key={slot.slotId}
+                            onClick={() => handleToggleSlot(lot, slot)}
+                            disabled={slot.status === 'BOOKED'}
+                            title={slot.status === 'MAINTENANCE' ? 'Click to unblock' : slot.status === 'AVAILABLE' ? 'Click to block' : 'Currently booked'}
+                            className={`p-1 rounded text-xs font-medium transition ${
+                              slot.status === 'MAINTENANCE' ? 'bg-orange-400 text-white hover:bg-orange-300' :
+                              slot.status === 'AVAILABLE' ? 'bg-green-100 text-green-800 hover:bg-orange-100' :
+                              'bg-gray-200 text-gray-400 cursor-not-allowed'
+                            }`}>
+                            {slot.slotNumber}
+                          </button>
+                        ))}
+                      </div>
+                      <p className="text-xs text-gray-400 mt-2">Green = available · Orange = maintenance</p>
+                    </details>
+                  </div>
                 </div>
               );
             })}
