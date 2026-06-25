@@ -29,7 +29,7 @@ function Register() {
   return (
     <div className="relative min-h-screen flex items-center justify-center animate-fade-in"
       style={{
-        backgroundImage: 'url(https://images.unsplash.com/photo-1573348722427-f1d6819fdf98?w=1600&q=80)',
+        backgroundImage: 'url(https://images.unsplash.com/photo-1573348722427-f1d6819fdf98?auto=format&fit=crop&w=1600&q=80)',
         backgroundSize: 'cover', backgroundPosition: 'center'
       }}>
       <div className="absolute inset-0 bg-black bg-opacity-60"></div>
