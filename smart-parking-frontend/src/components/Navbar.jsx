@@ -15,7 +15,8 @@ function Navbar() {
     <nav className="bg-blue-600 text-white shadow-lg">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-4">
-          <Link to={isAdmin ? "/admin" : "/dashboard"} className="text-2xl font-bold">
+          <Link to={isAdmin ? "/admin" : "/dashboard"} className="flex items-center gap-2 text-2xl font-bold">
+            <img src="/logo.svg" alt="Logo" className="w-9 h-9 rounded-full shadow" />
             Smart Parking
           </Link>
           <div className="flex gap-6 items-center">

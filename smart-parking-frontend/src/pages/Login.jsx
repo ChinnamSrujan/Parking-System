@@ -28,7 +28,10 @@ function Login() {
       }}>
       <div className="absolute inset-0 bg-black bg-opacity-60"></div>
       <div className="bg-white p-8 rounded-lg shadow-2xl w-96 animate-pop-in relative z-10">
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Login</h2>
+        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
+          <img src="/logo.svg" alt="Logo" className="w-14 h-14 mx-auto mb-2 rounded-full shadow" />
+          Login
+        </h2>
         {error && <div className="bg-red-100 text-red-700 p-3 rounded mb-4">{error}</div>}
         <form onSubmit={handleSubmit}>
           <input
