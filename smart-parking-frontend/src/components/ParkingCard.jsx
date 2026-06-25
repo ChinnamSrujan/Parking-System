@@ -1,27 +1,43 @@
 // Actual photos of Bengaluru malls from Wikimedia Commons (CC licensed)
 const locationImages = {
-  'phoenix':   'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Phoenix-marketcity-BLR-2.jpg/800px-Phoenix-marketcity-BLR-2.jpg',
-  'nexus':     'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Forum-Mall-Whitefield-Bangalore.jpg/800px-Forum-Mall-Whitefield-Bangalore.jpg',
-  'forum':     'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Forum-Mall-Whitefield-Bangalore.jpg/800px-Forum-Mall-Whitefield-Bangalore.jpg',
-  'pvr':       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Orion-mall-BLR-2.jpg/800px-Orion-mall-BLR-2.jpg',
-  'inox':      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Garuda_Mall_Bangalore_182322.jpg/800px-Garuda_Mall_Bangalore_182322.jpg',
-  'lulu':      'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Lulu_mall_bangalore.jpg/800px-Lulu_mall_bangalore.jpg',
-  'cinepolis': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Orion-mall-BLR-2.jpg/800px-Orion-mall-BLR-2.jpg',
+  'phoenix':     'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Phoenix-marketcity-BLR-2.jpg/800px-Phoenix-marketcity-BLR-2.jpg',
+  'nexus':       'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Forum-Mall-Whitefield-Bangalore.jpg/800px-Forum-Mall-Whitefield-Bangalore.jpg',
+  'forum':       'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Forum-Mall-Whitefield-Bangalore.jpg/800px-Forum-Mall-Whitefield-Bangalore.jpg',
+  'pvr':         'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Orion-mall-BLR-2.jpg/800px-Orion-mall-BLR-2.jpg',
+  'inox':        'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Garuda_Mall_Bangalore_182322.jpg/800px-Garuda_Mall_Bangalore_182322.jpg',
+  'lulu':        'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Lulu_mall_bangalore.jpg/800px-Lulu_mall_bangalore.jpg',
+  'cinepolis':   'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Orion-mall-BLR-2.jpg/800px-Orion-mall-BLR-2.jpg',
+  'ub city':     'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Garuda_Mall_Bangalore_182322.jpg/800px-Garuda_Mall_Bangalore_182322.jpg',
+  'ub':          'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Garuda_Mall_Bangalore_182322.jpg/800px-Garuda_Mall_Bangalore_182322.jpg',
+  'royal':       'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Phoenix-marketcity-BLR-2.jpg/800px-Phoenix-marketcity-BLR-2.jpg',
+  'mantri':      'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Lulu_mall_bangalore.jpg/800px-Lulu_mall_bangalore.jpg',
+  'orion':       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Orion-mall-BLR-2.jpg/800px-Orion-mall-BLR-2.jpg',
+  'market square': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Forum-Mall-Whitefield-Bangalore.jpg/800px-Forum-Mall-Whitefield-Bangalore.jpg',
+  'brigade':     'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Phoenix-marketcity-BLR-2.jpg/800px-Phoenix-marketcity-BLR-2.jpg',
+  'gopalan':     'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Lulu_mall_bangalore.jpg/800px-Lulu_mall_bangalore.jpg',
+  'total':       'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Forum-Mall-Whitefield-Bangalore.jpg/800px-Forum-Mall-Whitefield-Bangalore.jpg',
+  'central':     'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Garuda_Mall_Bangalore_182322.jpg/800px-Garuda_Mall_Bangalore_182322.jpg',
+  'innovative':  'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Orion-mall-BLR-2.jpg/800px-Orion-mall-BLR-2.jpg',
 };
 
 const locationColors = {
-  'phoenix':   'from-blue-600 to-blue-800',
-  'nexus':     'from-purple-600 to-purple-800',
-  'forum':     'from-green-600 to-green-800',
-  'pvr':       'from-red-600 to-red-800',
-  'inox':      'from-orange-600 to-orange-800',
-  'lulu':      'from-pink-600 to-pink-800',
-  'cinepolis': 'from-indigo-600 to-indigo-800',
+  'phoenix': 'from-blue-600 to-blue-800', 'nexus': 'from-purple-600 to-purple-800',
+  'forum': 'from-green-600 to-green-800', 'pvr': 'from-red-600 to-red-800',
+  'inox': 'from-orange-600 to-orange-800', 'lulu': 'from-pink-600 to-pink-800',
+  'cinepolis': 'from-indigo-600 to-indigo-800', 'ub': 'from-yellow-600 to-yellow-800',
+  'royal': 'from-rose-600 to-rose-800', 'mantri': 'from-teal-600 to-teal-800',
+  'orion': 'from-cyan-600 to-cyan-800', 'market': 'from-lime-600 to-lime-800',
+  'brigade': 'from-violet-600 to-violet-800', 'gopalan': 'from-amber-600 to-amber-800',
+  'total': 'from-emerald-600 to-emerald-800', 'central': 'from-sky-600 to-sky-800',
+  'innovative': 'from-fuchsia-600 to-fuchsia-800',
 };
 
 const locationIcons = {
-  'phoenix': '🏬', 'nexus': '🛍️', 'forum': '🏪',
-  'pvr': '🎬', 'inox': '🎭', 'lulu': '🏢', 'cinepolis': '🎥',
+  'phoenix': '🏬', 'nexus': '🛍️', 'forum': '🏪', 'pvr': '🎬',
+  'inox': '🎭', 'lulu': '🏢', 'cinepolis': '🎥', 'ub': '🏙️',
+  'royal': '👑', 'mantri': '🏛️', 'orion': '🌟', 'market': '🏪',
+  'brigade': '🏗️', 'gopalan': '🎪', 'total': '🛒', 'central': '🏬',
+  'innovative': '💡',
 };
 
 function getKey(name) {

@@ -38,7 +38,7 @@ public class DataSeeder implements CommandLineRunner {
             long lotCount = parkingLotRepository.count();
             if (lotCount == 0) {
                 seedParkingLots();
-            } else if (lotCount < 7) {
+            } else if (lotCount < 17) {
                 parkingLotRepository.deleteAll();
                 seedParkingLots();
             }
@@ -121,7 +121,77 @@ public class DataSeeder implements CommandLineRunner {
             40, 4.0, "H"
         ));
 
-        System.out.println("✓ Seeded 7 parking lots");
+        // 8. UB City Mall
+        parkingLotRepository.save(createParkingLot(
+            "UB City Mall Parking",
+            "Vittal Mallya Road, Shanthala Nagar, Bengaluru - 560001",
+            55, 6.0, "I"
+        ));
+
+        // 9. Royal Meenakshi Mall
+        parkingLotRepository.save(createParkingLot(
+            "Royal Meenakshi Mall",
+            "Bannerghatta Road, Hulimavu, Bengaluru - 560076",
+            65, 3.5, "J"
+        ));
+
+        // 10. Mantri Square Mall
+        parkingLotRepository.save(createParkingLot(
+            "Mantri Square Mall",
+            "Sampige Road, Malleshwaram, Bengaluru - 560003",
+            80, 5.0, "K"
+        ));
+
+        // 11. Orion East Mall
+        parkingLotRepository.save(createParkingLot(
+            "Orion East Mall",
+            "Banaswadi Main Road, Banaswadi, Bengaluru - 560043",
+            45, 4.0, "L"
+        ));
+
+        // 12. Market Square Mall
+        parkingLotRepository.save(createParkingLot(
+            "Market Square Mall",
+            "Opposite ITPL, Whitefield, Bengaluru - 560066",
+            50, 3.5, "M"
+        ));
+
+        // 13. Brigade Metropolis
+        parkingLotRepository.save(createParkingLot(
+            "Brigade Metropolis Parking",
+            "Whitefield Main Road, Garudacharpalya, Bengaluru - 560048",
+            60, 4.0, "N"
+        ));
+
+        // 14. Gopalan Arcade Mall
+        parkingLotRepository.save(createParkingLot(
+            "Gopalan Arcade Mall",
+            "Bannerghatta Road, JP Nagar, Bengaluru - 560078",
+            55, 3.0, "O"
+        ));
+
+        // 15. Total Mall
+        parkingLotRepository.save(createParkingLot(
+            "Total Mall Parking",
+            "Sarjapur Road, Marathahalli, Bengaluru - 560037",
+            70, 3.5, "P"
+        ));
+
+        // 16. Central Mall
+        parkingLotRepository.save(createParkingLot(
+            "Central Mall - Jayanagar",
+            "11th Main Road, 4th Block, Jayanagar, Bengaluru - 560011",
+            40, 4.0, "Q"
+        ));
+
+        // 17. Innovative Multiplex
+        parkingLotRepository.save(createParkingLot(
+            "Innovative Multiplex Parking",
+            "ITPL Road, Kundalahalli, Bengaluru - 560037",
+            35, 4.5, "R"
+        ));
+
+        System.out.println("✓ Seeded 17 parking lots");
     }
 
     private ParkingLot createParkingLot(String name, String address, int totalSlots, double price, String prefix) {
