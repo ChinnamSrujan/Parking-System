@@ -1,34 +1,27 @@
-// Using reliable free image sources for parking/mall locations
+// Actual photos of Bengaluru malls from Wikimedia Commons (CC licensed)
 const locationImages = {
-  'phoenix':   'https://images.unsplash.com/photo-1555400038-63f5ba517a47?auto=format&fit=crop&w=600&q=80',
-  'nexus':     'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80',
-  'forum':     'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=600&q=80',
-  'pvr':       'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80',
-  'inox':      'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=600&q=80',
-  'lulu':      'https://images.unsplash.com/photo-1567449303078-57ad995bd17f?auto=format&fit=crop&w=600&q=80',
-  'cinepolis': 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&w=600&q=80',
+  'phoenix':   'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Phoenix-marketcity-BLR-2.jpg/800px-Phoenix-marketcity-BLR-2.jpg',
+  'nexus':     'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Forum-Mall-Whitefield-Bangalore.jpg/800px-Forum-Mall-Whitefield-Bangalore.jpg',
+  'forum':     'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Forum-Mall-Whitefield-Bangalore.jpg/800px-Forum-Mall-Whitefield-Bangalore.jpg',
+  'pvr':       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Orion-mall-BLR-2.jpg/800px-Orion-mall-BLR-2.jpg',
+  'inox':      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Garuda_Mall_Bangalore_182322.jpg/800px-Garuda_Mall_Bangalore_182322.jpg',
+  'lulu':      'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Lulu_mall_bangalore.jpg/800px-Lulu_mall_bangalore.jpg',
+  'cinepolis': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Orion-mall-BLR-2.jpg/800px-Orion-mall-BLR-2.jpg',
 };
 
-// Fallback gradient colors per location for when images don't load
 const locationColors = {
-  'phoenix':   'from-blue-500 to-blue-700',
-  'nexus':     'from-purple-500 to-purple-700',
-  'forum':     'from-green-500 to-green-700',
-  'pvr':       'from-red-500 to-red-700',
-  'inox':      'from-orange-500 to-orange-700',
-  'lulu':      'from-pink-500 to-pink-700',
-  'cinepolis': 'from-indigo-500 to-indigo-700',
+  'phoenix':   'from-blue-600 to-blue-800',
+  'nexus':     'from-purple-600 to-purple-800',
+  'forum':     'from-green-600 to-green-800',
+  'pvr':       'from-red-600 to-red-800',
+  'inox':      'from-orange-600 to-orange-800',
+  'lulu':      'from-pink-600 to-pink-800',
+  'cinepolis': 'from-indigo-600 to-indigo-800',
 };
 
-// Parking lot icons
 const locationIcons = {
-  'phoenix':   '🏬',
-  'nexus':     '🛍️',
-  'forum':     '🏪',
-  'pvr':       '🎬',
-  'inox':      '🎭',
-  'lulu':      '🏢',
-  'cinepolis': '🎥',
+  'phoenix': '🏬', 'nexus': '🛍️', 'forum': '🏪',
+  'pvr': '🎬', 'inox': '🎭', 'lulu': '🏢', 'cinepolis': '🎥',
 };
 
 function getKey(name) {
@@ -41,42 +34,69 @@ function getKey(name) {
 
 function ParkingCard({ lot, onViewSlots }) {
   const key = getKey(lot.locationName);
-  const color = key ? locationColors[key] : 'from-blue-500 to-blue-700';
+  const imgSrc = key ? locationImages[key] : null;
+  const color = key ? locationColors[key] : 'from-blue-600 to-blue-800';
   const icon = key ? locationIcons[key] : '🅿️';
-  const pct = lot.totalSlots > 0 ? Math.round(((lot.totalSlots - lot.availableSlots) / lot.totalSlots) * 100) : 0;
+  const pct = lot.totalSlots > 0
+    ? Math.round(((lot.totalSlots - lot.availableSlots) / lot.totalSlots) * 100)
+    : 0;
 
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition card-hover animate-fade-in-up">
-      {/* Gradient header with icon — no external image dependency */}
-      <div className={`relative h-36 bg-gradient-to-br ${color} flex items-center justify-center`}>
-        <div className="text-center">
-          <div className="text-5xl mb-1">{icon}</div>
-          <div className="text-white font-bold text-sm opacity-90">{lot.locationName.split(' ').slice(0,2).join(' ')}</div>
+      {/* Mall photo with gradient fallback */}
+      <div className="relative h-40 overflow-hidden">
+        {imgSrc ? (
+          <img
+            src={imgSrc}
+            alt={lot.locationName}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.style.display = 'none';
+              e.target.nextSibling.style.display = 'flex';
+            }}
+          />
+        ) : null}
+        {/* Fallback gradient shown if image fails */}
+        <div
+          className={`w-full h-full bg-gradient-to-br ${color} flex items-center justify-center`}
+          style={{ display: imgSrc ? 'none' : 'flex' }}
+        >
+          <div className="text-center">
+            <div className="text-5xl mb-1">{icon}</div>
+            <div className="text-white font-bold text-sm opacity-90">
+              {lot.locationName.split(' ').slice(0, 2).join(' ')}
+            </div>
+          </div>
         </div>
+
+        {/* Dark overlay on image */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
+
         {/* Availability badge */}
         <div className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold shadow ${
-          lot.availableSlots > 10 ? 'bg-green-400 text-white' :
+          lot.availableSlots > 10 ? 'bg-green-500 text-white' :
           lot.availableSlots > 0  ? 'bg-yellow-400 text-gray-900' :
           'bg-red-500 text-white'
         }`}>
           {lot.availableSlots > 0 ? `${lot.availableSlots} free` : 'Full'}
         </div>
-        {/* Location pin */}
-        <div className="absolute bottom-2 left-3 text-white text-xs opacity-80">
-          📍 {lot.address.split(',').slice(-2).join(',').trim()}
+
+        {/* Location name on image */}
+        <div className="absolute bottom-2 left-3 text-white">
+          <p className="font-bold text-sm drop-shadow">{lot.locationName}</p>
+          <p className="text-xs opacity-80">📍 {lot.address.split(',').slice(-2).join(',').trim()}</p>
         </div>
       </div>
 
       {/* Card content */}
-      <div className="p-5">
-        <h3 className="text-lg font-bold mb-1 text-gray-800">{lot.locationName}</h3>
+      <div className="p-4">
         <div className="flex justify-between items-center mb-3 text-sm text-gray-600">
           <span>🅿 {lot.totalSlots} total slots</span>
           <span className="font-semibold text-blue-600">₹{lot.pricePerHour}/hr</span>
         </div>
 
         {/* Occupancy bar */}
-        <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4">
+        <div className="w-full bg-gray-200 rounded-full h-1.5 mb-1">
           <div
             className={`h-1.5 rounded-full transition-all ${
               pct > 80 ? 'bg-red-500' : pct > 50 ? 'bg-yellow-400' : 'bg-green-500'
